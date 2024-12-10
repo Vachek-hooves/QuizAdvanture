@@ -1,20 +1,43 @@
 import {createContext, useContext, useState, useEffect} from 'react';
-import {loadQuizFromStorage, saveQuizToStorage} from './utils';
+import {
+  loadQuizFromStorage,
+  saveQuizToStorage,
+  loadQuizStatistics,
+  saveQuizStatistics,
+  getQuizStats
+} from './utils';
 const AppContext = createContext({});
 
 export const ProviderContext = ({children}) => {
   const [quiz, setQuiz] = useState();
+  const [statistics, setStatistics] = useState([]);
   
-
   useEffect(() => {
-    const loadExistedData = async () => {
-      const quiz = await loadQuizFromStorage();
-      setQuiz(quiz);
+    const loadData = async () => {
+      const [quizData, statsData] = await Promise.all([
+        loadQuizFromStorage(),
+        loadQuizStatistics(),
+      ]);
+      setQuiz(quizData);
+      setStatistics(statsData);
     };
-    loadExistedData();
+    loadData();
   }, []);
 
-  const value = {quiz};
+  const saveQuizResult = async (quizId, correctAnswers, timeSpent) => {
+    const updatedStats = await saveQuizStatistics(quizId, correctAnswers, timeSpent);
+    setStatistics(updatedStats);
+  };
+
+  const getStatistics = () => getQuizStats(statistics);
+
+  const value = {
+    quiz,
+    statistics,
+    saveQuizResult,
+    getStatistics,
+  };
+
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
