@@ -11,6 +11,7 @@ export const poligonRegions = [
     strokeColor: '#27f',
     fillColor: '#27f',
     strokeWidth: 2,
+    id:'5'
   },
   {
     title: 'Athines',
@@ -18,6 +19,7 @@ export const poligonRegions = [
     strokeColor: '#423',
     fillColor: '#423',
     strokeWidth: 2,
+    id:'1'
   },
   {
     title: 'Sparta',
@@ -25,6 +27,7 @@ export const poligonRegions = [
     strokeColor: '#423',
     fillColor: '#423',
     strokeWidth: 2,
+    id:'2'
   },
   {
     title: 'Delphi',
@@ -32,6 +35,7 @@ export const poligonRegions = [
     strokeColor: '#423',
     fillColor: '#423',
     strokeWidth: 2,
+    id:'4'
   },
   {
     title: 'Thermopylae',
@@ -39,5 +43,6 @@ export const poligonRegions = [
     strokeColor: '#423',
     fillColor: '#423',
     strokeWidth: 2,
+    id:'3'
   },
 ];

@@ -29,6 +29,9 @@ const TabMapScreen = () => {
             fillColor={region.fillColor}
             strokeColor={region.strokeColor}
             strokeWidth={region.strokeWidth}
+            onPress={() => console.log(region)}
+            tappable={true}
+            zIndex={10}
           />
         ))}
         
