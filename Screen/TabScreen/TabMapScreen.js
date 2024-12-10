@@ -3,11 +3,14 @@ import MapView, {PROVIDER_DEFAULT, Polygon} from 'react-native-maps';
 import {poligonRegions} from '../../data/poligon';
 import React, {useRef} from 'react';
 
-const TabMapScreen = () => {
+
+const TabMapScreen = ({navigation}) => {
   const mapAnimation = useRef(new Animated.Value(0)).current;
   const mapRef = useRef(null);
 
   const onRegionSelect = region => {
+    
+    
     // Animate to the selected region
     mapRef.current.animateToRegion(
       {
