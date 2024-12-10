@@ -14,13 +14,13 @@ const TabMapScreen = () => {
   return (
     <View style={styles.container}>
       <MapView
-        provider={PROVIDER_DEFAULT} // Use default provider for iOS
+        provider={PROVIDER_DEFAULT} 
         style={styles.map}
         region={{
-          latitude: 37.9838, // Latitude for Athens, Greece
-          longitude: 23.7275, // Longitude for Athens, Greece
-          latitudeDelta: 0.2, // Zoom level
-          longitudeDelta: 1, // Zoom level
+          latitude: 37.1, // Latitude for Athens, Greece
+          longitude: 24.0, // Longitude for Athens, Greece
+          latitudeDelta: 0.5, // Zoom level
+          longitudeDelta: 4, // Zoom level
         }}>
         {poligonRegions.map((region, index) => (
           <Polygon
@@ -31,18 +31,7 @@ const TabMapScreen = () => {
             strokeWidth={region.strokeWidth}
           />
         ))}
-        {/* <Polygon
-          coordinates={greeceCoordinates}
-          // fillColor="rgba(0, 0, 255, 0.3)" // Semi-transparent blue
-          // strokeColor="rgba(0, 0, 255, 0.5)" // Blue border
-
-          fillColor="#27f"
-          strokeColor="#27f"
-          strokeWidth={2}
-          onPress={() => console.log('Pressed')}
-          tappable={true}
-          zIndex={10}
-        /> */}
+        
       </MapView>
     </View>
   );
