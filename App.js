@@ -10,7 +10,7 @@ function App(){
   return (
     <ProviderContext>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{headerShown:false}}>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
