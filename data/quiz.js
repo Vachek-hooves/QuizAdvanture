@@ -77,6 +77,7 @@ export const quiz = [
         answer: 'Marble',
       },
     ],
+    welcome:'Hello, traveler! You have arrived in the great city of Athens, the center of culture, science, and warfare. But do you truly know our history? Let me test your knowledge.'
   },
   {
     name: 'Sparta',
@@ -183,10 +184,11 @@ export const quiz = [
           '"Traveler, go tell Sparta that here we lie, obedient to her command."',
       },
     ],
+    welcome:'Traveler! Welcome to Sparta, a city of war, honor and iron discipline. Do you want to earn our trust? Then you must answer a few questions to prove your willingness to be a part of this story.'
   },
 
   {
-    name: 'Fermophil',
+    name: 'Thermopylae',
     id: '3',
     levelQuestions: [
       {
@@ -286,6 +288,7 @@ export const quiz = [
           'A tactical defeat but a strategic victory due to inspiration and unity',
       },
     ],
+    welcome:'You have found yourself in the heart of glory and death. Here at Thermopylae, 300 Spartans stood to the last to defend their land from the Persians. Want to learn more about this epic battle? Then you must take my quiz.'
   },
   {
     name: 'Delphi',
@@ -400,6 +403,7 @@ export const quiz = [
         answer: 'Odysseus',
       },
     ],
+    welcome:'You have arrived at Delphi, where Apollo himself bestows his prophecy on the people. Before you can gain access to the truths, you must pass my quiz. Only one who understands the essence of the prophetic words can receive the blessing.'
   },
   {
     name: 'Crete',
@@ -499,6 +503,6 @@ export const quiz = [
         options: ['Homer', 'Sophocles', 'Plutarch', 'Herodotus'],
         answer: 'Plutarch',
       },
-    ],
+    ],welcome:'You have come to Crete, the heart of myths and an ancient civilization. Before you can access the secrets of this island, you must pass my quiz. Only the one who can understand and reveal the history of this place will gain the power necessary for further conquests.'
   },
 ];
