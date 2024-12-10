@@ -1,3 +1,3 @@
 import WelcomeScreen from './WelcomeScreen';
-import StackQuizScreen from './StackQuizScreen';
-export {WelcomeScreen, StackQuizScreen};
+import StackQuizLevelGameScreen from './StackQuizLevelGameScreen';
+export {WelcomeScreen, StackQuizLevelGameScreen};

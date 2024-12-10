@@ -1,8 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {ProviderContext} from './store/context';
-
-import {WelcomeScreen} from './Screen/StackScreen';
+import {StackQuizLevelGameScreen, WelcomeScreen} from './Screen/StackScreen';
 import TabNavigation from './Navigation/TabNavigation';
 
 const Stack = createNativeStackNavigator();
@@ -13,6 +12,10 @@ function App() {
         <Stack.Navigator screenOptions={{headerShown: false}}>
           {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
           <Stack.Screen name="TabNavigation" component={TabNavigation} />
+          <Stack.Screen
+            name="StackQuizLevelGameScreen"
+            component={StackQuizLevelGameScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ProviderContext>
