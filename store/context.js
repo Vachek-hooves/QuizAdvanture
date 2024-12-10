@@ -1,9 +1,20 @@
 import {createContext, useContext, useState, useEffect} from 'react';
-
+import {loadQuizFromStorage, saveQuizToStorage} from './utils';
 const AppContext = createContext({});
 
 export const ProviderContext = ({children}) => {
-  const value = {};
+  const [quiz, setQuiz] = useState();
+  
+
+  useEffect(() => {
+    const loadExistedData = async () => {
+      const quiz = await loadQuizFromStorage();
+      setQuiz(quiz);
+    };
+    loadExistedData();
+  }, []);
+
+  const value = {quiz};
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
