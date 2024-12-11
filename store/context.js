@@ -4,14 +4,14 @@ import {
   saveQuizToStorage,
   loadQuizStatistics,
   saveQuizStatistics,
-  getQuizStats
+  getQuizStats,
 } from './utils';
-const AppContext = createContext({});
+const AppContext = createContext({statistics: []});
 
 export const ProviderContext = ({children}) => {
   const [quiz, setQuiz] = useState();
   const [statistics, setStatistics] = useState([]);
-  
+
   useEffect(() => {
     const loadData = async () => {
       const [quizData, statsData] = await Promise.all([
@@ -25,7 +25,11 @@ export const ProviderContext = ({children}) => {
   }, []);
 
   const saveQuizResult = async (quizId, correctAnswers, timeSpent) => {
-    const updatedStats = await saveQuizStatistics(quizId, correctAnswers, timeSpent);
+    const updatedStats = await saveQuizStatistics(
+      quizId,
+      correctAnswers,
+      timeSpent,
+    );
     setStatistics(updatedStats);
   };
 
