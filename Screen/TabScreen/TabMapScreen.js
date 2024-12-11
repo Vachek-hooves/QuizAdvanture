@@ -16,7 +16,7 @@ const TabMapScreen = ({navigation}) => {
         latitude: region.coordinates[0].latitude,
         longitude: region.coordinates[0].longitude,
         latitudeDelta: 0.5,
-        longitudeDelta: 0.8,
+        longitudeDelta: 1,
       },
       2000,
     );
@@ -49,9 +49,9 @@ const TabMapScreen = ({navigation}) => {
         provider={PROVIDER_DEFAULT}
         style={styles.map}
         region={{
-          latitude: 37.9838,
-          longitude: 23.7275,
-          latitudeDelta: 5,
+          latitude: 37.3,
+          longitude: 24.0,
+          latitudeDelta: 3,
           longitudeDelta: 4,
         }}
       >
