@@ -126,7 +126,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
                     <Text style={styles.buttonText}>Fight Again</Text>
                   </LinearGradient>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('TabMap')}>
+                <TouchableOpacity onPress={() => navigation.navigate('TabNavigation')}>
                   <LinearGradient
                     colors={['#145DA0', '#0C2D48']}
                     style={[styles.button, styles.mapButton]}>
