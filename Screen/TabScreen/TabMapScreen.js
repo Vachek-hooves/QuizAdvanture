@@ -10,6 +10,7 @@ import MapView, {PROVIDER_DEFAULT, Polygon} from 'react-native-maps';
 import {poligonRegions} from '../../data/poligon';
 import React, {useRef, useState} from 'react';
 import {MapMarkerAnimation} from '../../components/ui/animation';
+import LinearGradient from 'react-native-linear-gradient';
 
 const TabMapScreen = ({navigation}) => {
   const mapAnimation = useRef(new Animated.Value(0)).current;
@@ -42,14 +43,13 @@ const TabMapScreen = ({navigation}) => {
       }),
     ]).start();
   };
-
+  
   const handlePlayBattle = () => {
     navigation.navigate('StackQuizLevelGameScreen', {
       regionId: selectedRegion.id,
       regionTitle: selectedRegion.title,
     });
   };
-
   return (
     <View style={styles.container}>
       <MapView
@@ -77,18 +77,21 @@ const TabMapScreen = ({navigation}) => {
       </MapView>
 
       {selectedRegion && (
-        <View style={styles.popupContainer}>
+        <LinearGradient
+          colors={['rgba(12, 45, 72, 0.95)', 'rgba(20, 93, 160, 0.95)']}
+          style={styles.popupContainer}>
           <MapMarkerAnimation />
-          <View style={styles.popup}>
-            <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
-            <Text style={styles.popupText}>Region ID: {selectedRegion.id}</Text>
-            <TouchableOpacity
-              style={styles.playButton}
-              onPress={handlePlayBattle}>
+          <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
+          <Text style={styles.popupText}>Region ID: {selectedRegion.id}</Text>
+          <TouchableOpacity
+            onPress={handlePlayBattle}>
+            <LinearGradient
+              colors={['#2E8BC0', '#1A5F7A']}
+              style={styles.playButton} onPress={handlePlayBattle}>
               <Text style={styles.playButtonText}>Play Battle</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </LinearGradient>
       )}
     </View>
   );
@@ -109,44 +112,55 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     width: '90%',
+    // padding: 20,
+    borderRadius: 15,
     alignItems: 'center',
-  },
-  popup: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    width: '100%',
+    borderWidth: 1,
+    borderColor: '#B4E0FF',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
   popupTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
+    color: '#FFFFFF',
     marginBottom: 10,
     textAlign: 'center',
-    color: '#1A5F7A',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
   },
   popupText: {
     fontSize: 16,
     marginBottom: 15,
     textAlign: 'center',
-    color: '#666',
+    color: '#B4E0FF',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
   },
   playButton: {
-    backgroundColor: '#C84630',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
+    // paddingHorizontal: 30,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: '#B4E0FF',
+    marginVertical: 20,
   },
   playButtonText: {
-    color: 'white',
-    fontSize: 16,
+    color: '#FFFFFF',
+    fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
   },
 });
