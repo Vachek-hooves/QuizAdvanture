@@ -15,6 +15,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppContext} from '../../store/context';
 import {quiz as QuizData} from '../../data/quiz';
+import GoBack from '../../components/ui/staticIcons/GoBack';
 
 const {width, height} = Dimensions.get('window');
 const StackQuizLevelGameScreen = ({route, navigation}) => {
@@ -27,7 +28,10 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [wariorImage, setWariorImage] = useState(null);
   const [mainImage, setMainImage] = useState(null);
-  const [backgroundColors, setBackgroundColors] = useState(['rgba(12, 45, 72, 0.35)', 'rgba(20, 93, 160, 0.65)']);
+  const [backgroundColors, setBackgroundColors] = useState([
+    'rgba(12, 45, 72, 0.35)',
+    'rgba(20, 93, 160, 0.65)',
+  ]);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
   const [fadeAnim] = useState(new Animated.Value(0));
   const [optionAnimations] = useState([
@@ -50,7 +54,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   useEffect(() => {
     // Reset animations
     optionAnimations.forEach(anim => anim.setValue(0));
-    
+
     // Animate options one by one
     optionAnimations.forEach((anim, index) => {
       Animated.timing(anim, {
@@ -71,14 +75,20 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   const handleAnswer = selectedAnswer => {
     const currentQuestion = QUIZ.levelQuestions[currentQuestionIndex];
     const isCorrect = selectedAnswer === currentQuestion.answer;
-    
+
     if (isCorrect) {
       setScore(prev => prev + 1);
-      setBackgroundColors(['rgba(76, 175, 80, 0.35)', 'rgba(76, 175, 80, 0.65)']); // Green
+      setBackgroundColors([
+        'rgba(76, 175, 80, 0.35)',
+        'rgba(76, 175, 80, 0.65)',
+      ]); // Green
     } else {
-      setBackgroundColors(['rgba(244, 67, 54, 0.35)', 'rgba(244, 67, 54, 0.65)']); // Red
+      setBackgroundColors([
+        'rgba(244, 67, 54, 0.35)',
+        'rgba(244, 67, 54, 0.65)',
+      ]); // Red
     }
-    
+
     setIsAnswerCorrect(isCorrect);
 
     // Start fade in animation
@@ -97,7 +107,10 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
         useNativeDriver: true,
       }).start(() => {
         setIsAnswerCorrect(null);
-        setBackgroundColors(['rgba(12, 45, 72, 0.35)', 'rgba(20, 93, 160, 0.65)']); // Reset to default blue
+        setBackgroundColors([
+          'rgba(12, 45, 72, 0.35)',
+          'rgba(20, 93, 160, 0.65)',
+        ]); // Reset to default blue
         if (currentQuestionIndex < QUIZ.levelQuestions.length - 1) {
           setCurrentQuestionIndex(prev => prev + 1);
         } else {
@@ -179,7 +192,8 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
                     <Text style={styles.buttonText}>Fight Again</Text>
                   </LinearGradient>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('TabNavigation')}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('TabNavigation')}>
                   <LinearGradient
                     colors={['#145DA0', '#0C2D48']}
                     style={[styles.button, styles.mapButton]}>
@@ -196,9 +210,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
 
   return (
     <ImageBackground source={mainImage} style={styles.container}>
-      <LinearGradient
-        colors={backgroundColors}
-        style={styles.container}>
+      <LinearGradient colors={backgroundColors} style={styles.container}>
         <SafeAreaView style={styles.container}>
           <WelcomeModal />
           <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -232,39 +244,42 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
               </Text>
             </LinearGradient>
             <View style={styles.optionsContainer}>
-              {QUIZ.levelQuestions[currentQuestionIndex].options.map((option, index) => (
-                <Animated.View
-                  key={index}
-                  style={{
-                    opacity: optionAnimations[index],
-                    transform: [
-                      {
-                        translateY: optionAnimations[index].interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [50, 0], // Slide up from below
-                        }),
-                      },
-                      {
-                        scale: optionAnimations[index].interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [0.8, 1], // Scale up
-                        }),
-                      },
-                    ],
-                  }}>
-                  <TouchableOpacity
-                    onPress={() => handleAnswer(option)}
-                    disabled={isAnswerCorrect !== null}>
-                    <LinearGradient
-                      colors={['#2E8BC0', '#1A5F7A']}
-                      style={styles.optionButton}>
-                      <Text style={styles.optionText}>{option}</Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </Animated.View>
-              ))}
+              {QUIZ.levelQuestions[currentQuestionIndex].options.map(
+                (option, index) => (
+                  <Animated.View
+                    key={index}
+                    style={{
+                      opacity: optionAnimations[index],
+                      transform: [
+                        {
+                          translateY: optionAnimations[index].interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [50, 0], // Slide up from below
+                          }),
+                        },
+                        {
+                          scale: optionAnimations[index].interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [0.8, 1], // Scale up
+                          }),
+                        },
+                      ],
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => handleAnswer(option)}
+                      disabled={isAnswerCorrect !== null}>
+                      <LinearGradient
+                        colors={['#2E8BC0', '#1A5F7A']}
+                        style={styles.optionButton}>
+                        <Text style={styles.optionText}>{option}</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </Animated.View>
+                ),
+              )}
             </View>
           </ScrollView>
+          <GoBack />
         </SafeAreaView>
       </LinearGradient>
     </ImageBackground>
