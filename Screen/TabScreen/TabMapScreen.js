@@ -18,6 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 const TabMapScreen = ({navigation}) => {
   const mapAnimation = useRef(new Animated.Value(0)).current;
   const mapRef = useRef(null);
+  const [showAnimation, setShowAnimation] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState(null);
 
   const onRegionSelect = region => {
@@ -48,10 +49,14 @@ const TabMapScreen = ({navigation}) => {
   };
 
   const handlePlayBattle = () => {
-    navigation.navigate('StackQuizLevelGameScreen', {
-      regionId: selectedRegion.id,
-      regionTitle: selectedRegion.title,
-    });
+    setShowAnimation(true);
+    setTimeout(() => {
+      setShowAnimation(false);
+      navigation.navigate('StackQuizLevelGameScreen', {
+        regionId: selectedRegion.id,
+        regionTitle: selectedRegion.title,
+      });
+    }, 2500);
   };
   return (
     <View style={styles.container}>
@@ -95,6 +100,12 @@ const TabMapScreen = ({navigation}) => {
             </LinearGradient>
           </TouchableOpacity>
         </LinearGradient>
+      )}
+
+      {showAnimation && (
+        <View style={styles.animationContainer}>
+          <SwardAnimation />
+        </View>
       )}
     </View>
   );
@@ -165,5 +176,15 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
     paddingVertical: 12,
     paddingHorizontal: 30,
+  },
+  animationContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
   },
 });
