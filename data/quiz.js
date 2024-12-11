@@ -1,5 +1,6 @@
 export const quiz = [
   {
+    isLocked: false,
     image: require('../assets/images/ancientCity/ancientAthens.png'),
     warior: require('../assets/images/warior/wariorAthene.png'),
     name: 'Athines',
@@ -83,6 +84,7 @@ export const quiz = [
       'Hello, traveler! You have arrived in the great city of Athens, the center of culture, science, and warfare. But do you truly know our history? Let me test your knowledge.',
   },
   {
+    isLocked: true,
     image: require('../assets/images/ancientCity/ancientSparta.png'),
     warior: require('../assets/images/warior/wariorSparta.png'),
     name: 'Sparta',
@@ -194,6 +196,7 @@ export const quiz = [
   },
 
   {
+    isLocked: true,
     image: require('../assets/images/ancientCity/ancientThermo.png'),
     warior: require('../assets/images/warior/wariorThermopylae.png'),
     name: 'Thermopylae',
@@ -300,6 +303,7 @@ export const quiz = [
       'You have found yourself in the heart of glory and death. Here at Thermopylae, 300 Spartans stood to the last to defend their land from the Persians. Want to learn more about this epic battle? Then you must take my quiz.',
   },
   {
+    isLocked: true,
     image: require('../assets/images/ancientCity/ancientDelphi.png'),
     warior: require('../assets/images/warior/wariorDelphi.png'),
     name: 'Delphi',
@@ -418,6 +422,7 @@ export const quiz = [
       'You have arrived at Delphi, where Apollo himself bestows his prophecy on the people. Before you can gain access to the truths, you must pass my quiz. Only one who understands the essence of the prophetic words can receive the blessing.',
   },
   {
+    isLocked: true,
     image: require('../assets/images/ancientCity/ancientCrete.png'),
     warior: require('../assets/images/warior/wariorCrete.png'),
     name: 'Crete',
