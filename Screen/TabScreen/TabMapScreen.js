@@ -14,12 +14,17 @@ import {
   SwardAnimation,
 } from '../../components/ui/animation';
 import LinearGradient from 'react-native-linear-gradient';
+import {quiz as QuizData} from '../../data/quiz';
 
 const TabMapScreen = ({navigation}) => {
-  const mapAnimation = useRef(new Animated.Value(0)).current;
-  const mapRef = useRef(null);
-  const [showAnimation, setShowAnimation] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState(null);
+  const [showAnimation, setShowAnimation] = useState(false);
+  const mapRef = useRef(null);
+
+  const isRegionLocked = (regionId) => {
+    const quiz = QuizData.find(q => String(q.id) === String(regionId));
+    return quiz ? quiz.isLocked : true;
+  };
 
   const onRegionSelect = region => {
     setSelectedRegion(region);
@@ -33,19 +38,6 @@ const TabMapScreen = ({navigation}) => {
       },
       2000,
     );
-
-    Animated.sequence([
-      Animated.timing(mapAnimation, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(mapAnimation, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
   };
 
   const handlePlayBattle = () => {
@@ -70,38 +62,51 @@ const TabMapScreen = ({navigation}) => {
           latitudeDelta: 3,
           longitudeDelta: 4,
         }}>
-        {poligonRegions.map((region, index) => (
-          <Polygon
-            key={index}
-            coordinates={region.coordinates}
-            fillColor={region.fillColor}
-            strokeColor={region.strokeColor}
-            strokeWidth={region.strokeWidth}
-            onPress={() => onRegionSelect(region)}
-            tappable={true}
-            zIndex={index + 1}
-          />
-        ))}
+        {poligonRegions.map((region, index) => {
+          const locked = isRegionLocked(region.id);
+          return (
+            <Polygon
+              key={index}
+              coordinates={region.coordinates}
+              fillColor={locked ? 'rgba(169, 169, 169, 0.5)' : region.fillColor}
+              strokeColor={locked ? '#666666' : region.strokeColor}
+              strokeWidth={region.strokeWidth}
+              onPress={() => onRegionSelect(region)}
+              tappable={true}
+              zIndex={index + 1}
+            />
+          );
+        })}
       </MapView>
 
       {selectedRegion && (
         <View style={styles.popupWrapper}>
           <MapMarkerAnimation />
-        <LinearGradient
-          colors={['rgba(12, 45, 72, 0.95)', 'rgba(20, 93, 160, 0.95)']}
-          style={styles.popupContainer}>
-          <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
-          {/* <Text style={styles.popupText}>Region ID: {selectedRegion.id}</Text> */}
-          <TouchableOpacity onPress={handlePlayBattle}>
-            <LinearGradient
-              colors={['#2E8BC0', '#1A5F7A']}
-              style={styles.playButton}
-              onPress={handlePlayBattle}>
-              <Text style={styles.playButtonText}>Play Battle</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </LinearGradient>
-                </View>
+          <LinearGradient
+            colors={['rgba(12, 45, 72, 0.95)', 'rgba(20, 93, 160, 0.95)']}
+            style={styles.popupContainer}>
+            <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
+            <TouchableOpacity 
+              onPress={handlePlayBattle}
+              disabled={isRegionLocked(selectedRegion.id)}>
+              <LinearGradient
+                colors={isRegionLocked(selectedRegion.id) 
+                  ? ['#666666', '#444444'] 
+                  : ['#2E8BC0', '#1A5F7A']}
+                style={[
+                  styles.playButton,
+                  isRegionLocked(selectedRegion.id) && styles.playButtonLocked
+                ]}>
+                <Text style={[
+                  styles.playButtonText,
+                  isRegionLocked(selectedRegion.id) && styles.playButtonTextLocked
+                ]}>
+                  {isRegionLocked(selectedRegion.id) ? 'Region Locked' : 'Play Battle'}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </LinearGradient>
+        </View>
       )}
 
       {showAnimation && (
@@ -168,11 +173,17 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
   },
   playButton: {
+    // paddingVertical: 12,
     // paddingHorizontal: 30,
     borderRadius: 25,
     borderWidth: 1,
     borderColor: '#B4E0FF',
     marginVertical: 20,
+    marginTop: 10,
+  },
+  playButtonLocked: {
+    borderColor: '#666666',
+    opacity: 0.7,
   },
   playButtonText: {
     color: '#FFFFFF',
@@ -184,6 +195,9 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
     paddingVertical: 12,
     paddingHorizontal: 30,
+  },
+  playButtonTextLocked: {
+    color: '#999999',
   },
   animationContainer: {
     position: 'absolute',
