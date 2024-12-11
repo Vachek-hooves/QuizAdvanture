@@ -8,12 +8,13 @@ import {
   ScrollView,
   Modal,
   ImageBackground,
+  Dimensions,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppContext} from '../../store/context';
-import { quiz as QuizData } from '../../data/quiz';
+import {quiz as QuizData} from '../../data/quiz';
 
-
+const {width, height} = Dimensions.get('window');
 const StackQuizLevelGameScreen = ({route, navigation}) => {
   const {regionId} = route.params;
   const {quiz, saveQuizResult} = useAppContext();
@@ -25,15 +26,16 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   const [wariorImage, setWariorImage] = useState(null);
   const [mainImage, setMainImage] = useState(null);
 
-  const QUIZ = quiz.find(q => q.id === regionId);
+  const QUIZ = quiz.find(q => String(q.id) === String(regionId));
 
   useEffect(() => {
-    const mainImage = QuizData.find(q => q.id === regionId).image;
-    const wariorImage = QuizData.find(q => q.id === regionId).warior;
-    setMainImage(mainImage);
-    setWariorImage(wariorImage);
+    const quizData = QuizData.find(q => String(q.id) === String(regionId));
+    if (quizData) {
+      setMainImage(quizData.image);
+      setWariorImage(quizData.warior);
+    }
+  }, [regionId]);
 
-  }, [wariorImage, mainImage]);
   const startGame = () => {
     setShowWelcome(false);
     setGameStartTime(Date.now());
@@ -74,37 +76,36 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
       animationType="fade"
       transparent={true}
       visible={showWelcome}
-      onRequestClose={() => setShowWelcome(false)}>
+      onRequestClose={() => setShowWelcome(false)}
+      style={styles.modalOverlay}>
       <View style={styles.modalOverlay}>
-        <LinearGradient
-          colors={['#1A5F7A'+90, '#2E8BC0'+90]}
-          style={styles.modalContent}>
         <ImageBackground
           source={wariorImage}
           style={styles.wariorImage}
-          resizeMode="contain">
-          <Text style={styles.modalTitle}>{QUIZ.name}</Text>
+          resizeMode="cover">
+          <LinearGradient
+            colors={['#1A5F7A' + 30, '#2E8BC0' + 50, '#2E8BC0' + 70]}
+            style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{QUIZ.name}</Text>
             <Text style={styles.modalWelcomeText}>{QUIZ.welcome}</Text>
-          <TouchableOpacity 
-            onPress={startGame}
-            style={styles.startButtonContainer}>
-            <LinearGradient
-              colors={['#145DA0'+90, '#0C2D48'+90]}
-              style={styles.startButton}>
-              <Text style={styles.startButtonText}>Start Battle</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-                </ImageBackground>
-        </LinearGradient>
+            <TouchableOpacity
+              onPress={startGame}
+              style={styles.startButtonContainer}>
+              <LinearGradient
+                colors={['#145DA0' + 90, '#0C2D48' + 90]}
+                style={styles.startButton}>
+                <Text style={styles.startButtonText}>Start Battle</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </LinearGradient>
+        </ImageBackground>
       </View>
     </Modal>
   );
 
   if (showResult) {
     return (
-      <ImageBackground
-        source={mainImage}
-        style={styles.container}>
+      <ImageBackground source={mainImage} style={styles.container}>
         <LinearGradient
           colors={['rgba(12, 45, 72, 0.9)', 'rgba(20, 93, 160, 0.9)']}
           style={styles.container}>
@@ -141,9 +142,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   }
 
   return (
-    <ImageBackground
-      source={mainImage}
-      style={styles.container}>
+    <ImageBackground source={mainImage} style={styles.container}>
       <LinearGradient
         colors={['rgba(12, 45, 72, 0.35)', 'rgba(20, 93, 160, 0.65)']}
         style={styles.container}>
@@ -164,17 +163,19 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
               </Text>
             </LinearGradient>
             <View style={styles.optionsContainer}>
-              {QUIZ.levelQuestions[currentQuestionIndex].options.map((option, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => handleAnswer(option)}>
-                  <LinearGradient
-                    colors={['#2E8BC0', '#1A5F7A']}
-                    style={styles.optionButton}>
-                    <Text style={styles.optionText}>{option}</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              ))}
+              {QUIZ.levelQuestions[currentQuestionIndex].options.map(
+                (option, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleAnswer(option)}>
+                    <LinearGradient
+                      colors={['#2E8BC0', '#1A5F7A']}
+                      style={styles.optionButton}>
+                      <Text style={styles.optionText}>{option}</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                ),
+              )}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -195,25 +196,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   modalContent: {
-    // width: '95%',
+    width: '100%',
+    height: height,
     // padding: 30,
-    borderRadius: 20,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#B4E0FF',
-    paddingHorizontal: 10,
-    paddingVertical: 20,
+    // borderRadius: 20,
+    // alignItems: 'center',
+    // borderWidth: 2,
+    // borderColor: '#B4E0FF',
+    // paddingHorizontal: 10,
+    // paddingVertical: 20,
   },
   modalTitle: {
     fontSize: 32,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    // marginBottom: 20,
     textAlign: 'center',
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 5,
-    marginVertical:20
+    marginVertical: 20,
+    marginTop:'80%'
   },
   modalWelcomeText: {
     fontSize: 18,
@@ -222,17 +224,16 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     lineHeight: 24,
     paddingHorizontal: 20,
-    backgroundColor: 'rgba(12, 45, 72, 0.7)',
+    backgroundColor: 'rgba(12, 45, 72, 0.4)',
     borderRadius: 10,
     padding: 10,
   },
   startButton: {
-    // paddingVertical: 15,
-    // paddingHorizontal: 30,
     borderRadius: 25,
     borderWidth: 1,
     borderColor: '#B4E0FF',
     marginVertical: 40,
+    marginHorizontal: 60,
   },
   startButtonText: {
     color: '#FFFFFF',
@@ -243,6 +244,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
     paddingHorizontal: 20,
     paddingVertical: 10,
+    textAlign: 'center',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -350,11 +352,18 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
   },
   wariorImage: {
-    // width: '100%',
-    height: '80%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 20,
+    // width: 350,
+    // aspectRatio: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // marginVertical: 20,
+    width: width * 0.9,
+    height: height * 0.8,
+    borderRadius: 20,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: '#B4E0FF',
+    // justifyContent:'flex-end'
   },
 });
 
