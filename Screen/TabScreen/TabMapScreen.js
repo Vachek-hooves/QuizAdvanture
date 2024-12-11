@@ -85,10 +85,11 @@ const TabMapScreen = ({navigation}) => {
       </MapView>
 
       {selectedRegion && (
+        <View style={styles.popupWrapper}>
+          <MapMarkerAnimation />
         <LinearGradient
           colors={['rgba(12, 45, 72, 0.95)', 'rgba(20, 93, 160, 0.95)']}
           style={styles.popupContainer}>
-          <MapMarkerAnimation />
           <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
           {/* <Text style={styles.popupText}>Region ID: {selectedRegion.id}</Text> */}
           <TouchableOpacity onPress={handlePlayBattle}>
@@ -100,6 +101,7 @@ const TabMapScreen = ({navigation}) => {
             </LinearGradient>
           </TouchableOpacity>
         </LinearGradient>
+                </View>
       )}
 
       {showAnimation && (
@@ -122,9 +124,15 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
-  popupContainer: {
+  popupWrapper: {
     position: 'absolute',
     bottom: 20,
+    width: '90%',
+    alignItems: 'center',
+  },
+  popupContainer: {
+    // position: 'absolute',
+    // bottom: 20,
     width: '90%',
     // padding: 20,
     borderRadius: 15,

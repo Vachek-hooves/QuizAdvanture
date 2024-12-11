@@ -18,6 +18,7 @@ export default MapMarkerAnimation;
 const styles = StyleSheet.create({
   container: {
     width: 200,
-    height: 200,
+    height: 180,
+    marginBottom:-30
   },
 });
