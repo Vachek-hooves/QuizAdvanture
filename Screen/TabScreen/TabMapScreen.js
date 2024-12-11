@@ -9,7 +9,10 @@ import {
 import MapView, {PROVIDER_DEFAULT, Polygon} from 'react-native-maps';
 import {poligonRegions} from '../../data/poligon';
 import React, {useRef, useState} from 'react';
-import {MapMarkerAnimation} from '../../components/ui/animation';
+import {
+  MapMarkerAnimation,
+  SwardAnimation,
+} from '../../components/ui/animation';
 import LinearGradient from 'react-native-linear-gradient';
 
 const TabMapScreen = ({navigation}) => {
@@ -43,7 +46,7 @@ const TabMapScreen = ({navigation}) => {
       }),
     ]).start();
   };
-  
+
   const handlePlayBattle = () => {
     navigation.navigate('StackQuizLevelGameScreen', {
       regionId: selectedRegion.id,
@@ -83,11 +86,11 @@ const TabMapScreen = ({navigation}) => {
           <MapMarkerAnimation />
           <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
           {/* <Text style={styles.popupText}>Region ID: {selectedRegion.id}</Text> */}
-          <TouchableOpacity
-            onPress={handlePlayBattle}>
+          <TouchableOpacity onPress={handlePlayBattle}>
             <LinearGradient
               colors={['#2E8BC0', '#1A5F7A']}
-              style={styles.playButton} onPress={handlePlayBattle}>
+              style={styles.playButton}
+              onPress={handlePlayBattle}>
               <Text style={styles.playButtonText}>Play Battle</Text>
             </LinearGradient>
           </TouchableOpacity>

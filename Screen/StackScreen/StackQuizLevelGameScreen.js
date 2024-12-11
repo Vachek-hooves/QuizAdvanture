@@ -16,7 +16,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useAppContext} from '../../store/context';
 import {quiz as QuizData} from '../../data/quiz';
 import GoBack from '../../components/ui/staticIcons/GoBack';
-import {MapMarkerAnimation} from '../../components/ui/animation';
+import {
+  MapMarkerAnimation,
+ 
+} from '../../components/ui/animation';
 
 const {width, height} = Dimensions.get('window');
 const StackQuizLevelGameScreen = ({route, navigation}) => {
@@ -221,7 +224,8 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
                     styles.progressBar,
                     {
                       width: `${
-                        (currentQuestionIndex / quizData.levelQuestions.length) *
+                        (currentQuestionIndex /
+                          quizData.levelQuestions.length) *
                         100
                       }%`,
                     },
