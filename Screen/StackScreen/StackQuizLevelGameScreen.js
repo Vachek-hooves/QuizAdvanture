@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppContext} from '../../store/context';
+import { quiz as QuizData } from '../../data/quiz';
+
 
 const StackQuizLevelGameScreen = ({route, navigation}) => {
   const {regionId} = route.params;
@@ -20,9 +22,18 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   const [gameStartTime, setGameStartTime] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [wariorImage, setWariorImage] = useState(null);
+  const [mainImage, setMainImage] = useState(null);
 
   const QUIZ = quiz.find(q => q.id === regionId);
 
+  useEffect(() => {
+    const mainImage = QuizData.find(q => q.id === regionId).image;
+    const wariorImage = QuizData.find(q => q.id === regionId).warior;
+    setMainImage(mainImage);
+    setWariorImage(wariorImage);
+
+  }, [wariorImage, mainImage]);
   const startGame = () => {
     setShowWelcome(false);
     setGameStartTime(Date.now());
@@ -66,19 +77,24 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
       onRequestClose={() => setShowWelcome(false)}>
       <View style={styles.modalOverlay}>
         <LinearGradient
-          colors={['#1A5F7A', '#2E8BC0']}
+          colors={['#1A5F7A'+90, '#2E8BC0'+90]}
           style={styles.modalContent}>
+        <ImageBackground
+          source={wariorImage}
+          style={styles.wariorImage}
+          resizeMode="contain">
           <Text style={styles.modalTitle}>{QUIZ.name}</Text>
-          <Text style={styles.modalWelcomeText}>{QUIZ.welcome}</Text>
+            <Text style={styles.modalWelcomeText}>{QUIZ.welcome}</Text>
           <TouchableOpacity 
             onPress={startGame}
             style={styles.startButtonContainer}>
             <LinearGradient
-              colors={['#145DA0', '#0C2D48']}
+              colors={['#145DA0'+90, '#0C2D48'+90]}
               style={styles.startButton}>
               <Text style={styles.startButtonText}>Start Battle</Text>
             </LinearGradient>
           </TouchableOpacity>
+                </ImageBackground>
         </LinearGradient>
       </View>
     </Modal>
@@ -86,76 +102,84 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
 
   if (showResult) {
     return (
-      <LinearGradient
-        colors={['#0C2D48', '#145DA0']}
+      <ImageBackground
+        source={mainImage}
         style={styles.container}>
-        <SafeAreaView style={styles.container}>
-          <View style={styles.resultContainer}>
-            <Text style={styles.resultTitle}>Battle Completed!</Text>
-            <View style={styles.scrollContainer}>
-              <Text style={styles.resultScore}>
-                Your Score: {score}/{QUIZ.levelQuestions.length}
-              </Text>
-              <Text style={styles.resultPercentage}>
-                {Math.round((score / QUIZ.levelQuestions.length) * 100)}%
-              </Text>
-              <TouchableOpacity onPress={handlePlayAgain}>
-                <LinearGradient
-                  colors={['#2E8BC0', '#1A5F7A']}
-                  style={styles.button}>
-                  <Text style={styles.buttonText}>Fight Again</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('TabMap')}>
-                <LinearGradient
-                  colors={['#145DA0', '#0C2D48']}
-                  style={[styles.button, styles.mapButton]}>
-                  <Text style={styles.buttonText}>Return to Map</Text>
-                </LinearGradient>
-              </TouchableOpacity>
+        <LinearGradient
+          colors={['rgba(12, 45, 72, 0.9)', 'rgba(20, 93, 160, 0.9)']}
+          style={styles.container}>
+          <SafeAreaView style={styles.container}>
+            <View style={styles.resultContainer}>
+              <Text style={styles.resultTitle}>Battle Completed!</Text>
+              <View style={styles.scrollContainer}>
+                <Text style={styles.resultScore}>
+                  Your Score: {score}/{QUIZ.levelQuestions.length}
+                </Text>
+                <Text style={styles.resultPercentage}>
+                  {Math.round((score / QUIZ.levelQuestions.length) * 100)}%
+                </Text>
+                <TouchableOpacity onPress={handlePlayAgain}>
+                  <LinearGradient
+                    colors={['#2E8BC0', '#1A5F7A']}
+                    style={styles.button}>
+                    <Text style={styles.buttonText}>Fight Again</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('TabMap')}>
+                  <LinearGradient
+                    colors={['#145DA0', '#0C2D48']}
+                    style={[styles.button, styles.mapButton]}>
+                    <Text style={styles.buttonText}>Return to Map</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </SafeAreaView>
-      </LinearGradient>
+          </SafeAreaView>
+        </LinearGradient>
+      </ImageBackground>
     );
   }
 
   return (
-    <LinearGradient
-      colors={['#0C2D48', '#145DA0']}
+    <ImageBackground
+      source={mainImage}
       style={styles.container}>
-      <SafeAreaView style={styles.container}>
-        <WelcomeModal />
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.progressContainer}>
-            <Text style={styles.progressText}>
-              Question {currentQuestionIndex + 1}/{QUIZ.levelQuestions.length}
-            </Text>
-            <Text style={styles.scoreText}>Score: {score}</Text>
-          </View>
-          <LinearGradient
-            colors={['rgba(46, 139, 192, 0.9)', 'rgba(26, 95, 122, 0.9)']}
-            style={styles.questionContainer}>
-            <Text style={styles.questionText}>
-              {QUIZ.levelQuestions[currentQuestionIndex].question}
-            </Text>
-          </LinearGradient>
-          <View style={styles.optionsContainer}>
-            {QUIZ.levelQuestions[currentQuestionIndex].options.map((option, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handleAnswer(option)}>
-                <LinearGradient
-                  colors={['#2E8BC0', '#1A5F7A']}
-                  style={styles.optionButton}>
-                  <Text style={styles.optionText}>{option}</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </LinearGradient>
+      <LinearGradient
+        colors={['rgba(12, 45, 72, 0.35)', 'rgba(20, 93, 160, 0.65)']}
+        style={styles.container}>
+        <SafeAreaView style={styles.container}>
+          <WelcomeModal />
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.progressContainer}>
+              <Text style={styles.progressText}>
+                Question {currentQuestionIndex + 1}/{QUIZ.levelQuestions.length}
+              </Text>
+              <Text style={styles.scoreText}>Score: {score}</Text>
+            </View>
+            <LinearGradient
+              colors={['rgba(46, 139, 192, 0.9)', 'rgba(26, 95, 122, 0.9)']}
+              style={styles.questionContainer}>
+              <Text style={styles.questionText}>
+                {QUIZ.levelQuestions[currentQuestionIndex].question}
+              </Text>
+            </LinearGradient>
+            <View style={styles.optionsContainer}>
+              {QUIZ.levelQuestions[currentQuestionIndex].options.map((option, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => handleAnswer(option)}>
+                  <LinearGradient
+                    colors={['#2E8BC0', '#1A5F7A']}
+                    style={styles.optionButton}>
+                    <Text style={styles.optionText}>{option}</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </LinearGradient>
+    </ImageBackground>
   );
 };
 
@@ -179,8 +203,6 @@ const styles = StyleSheet.create({
     borderColor: '#B4E0FF',
     paddingHorizontal: 10,
     paddingVertical: 20,
-
-    
   },
   modalTitle: {
     fontSize: 32,
@@ -191,15 +213,18 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 5,
-marginVertical:20
+    marginVertical:20
   },
   modalWelcomeText: {
     fontSize: 18,
     color: '#E6F3FF',
     textAlign: 'center',
-    // marginBottom: 30,
+    marginBottom: 30,
     lineHeight: 24,
     paddingHorizontal: 20,
+    backgroundColor: 'rgba(12, 45, 72, 0.7)',
+    borderRadius: 10,
+    padding: 10,
   },
   startButton: {
     // paddingVertical: 15,
@@ -323,6 +348,13 @@ marginVertical:20
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 3,
+  },
+  wariorImage: {
+    // width: '100%',
+    height: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
   },
 });
 
