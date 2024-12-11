@@ -25,10 +25,12 @@ export const ProviderContext = ({children}) => {
   }, []);
 
   const saveQuizResult = async (quizId, correctAnswers, timeSpent) => {
+    const totalScore = correctAnswers * 5;
     const updatedStats = await saveQuizStatistics(
       quizId,
       correctAnswers,
       timeSpent,
+      totalScore,
     );
     setStatistics(updatedStats);
   };

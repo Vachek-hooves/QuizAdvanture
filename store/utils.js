@@ -31,62 +31,63 @@ export const loadQuizFromStorage = async () => {
 
 //  QUIZ GAMEPLAY UTILS
 
-const createQuizAttempt = (quizId, correctAnswers, timeSpent) => ({
+const createQuizAttempt = (quizId, correctAnswers, timeSpent, totalScore) => ({
     quizId,
     correctAnswers,
     percentage: (correctAnswers / 10) * 100,
     timeSpent, // in seconds
     timestamp: new Date().toISOString(),
-  });
+    score: totalScore, // Add score field
+});
 
-  export const saveQuizStatistics = async (quizId, correctAnswers, timeSpent) => {
+export const saveQuizStatistics = async (quizId, correctAnswers, timeSpent, totalScore) => {
     try {
-      // Load existing statistics
-      const existingStats = await loadQuizStatistics();
-      const newAttempt = createQuizAttempt(quizId, correctAnswers, timeSpent);
-      
-      // Add new attempt to existing stats
-      const updatedStats = [...existingStats, newAttempt];
-      
-      await AsyncStorage.setItem(STATS_KEY, JSON.stringify(updatedStats));
-      return updatedStats;
+        const existingStats = await loadQuizStatistics();
+        const newAttempt = createQuizAttempt(quizId, correctAnswers, timeSpent, totalScore);
+        
+        const updatedStats = [...existingStats, newAttempt];
+        
+        await AsyncStorage.setItem(STATS_KEY, JSON.stringify(updatedStats));
+        return updatedStats;
     } catch (error) {
-      console.log('statistics saving error', error);
-      return [];
+        console.log('statistics saving error', error);
+        return [];
     }
-  };
+};
 
-  export const loadQuizStatistics = async () => {
+export const loadQuizStatistics = async () => {
     try {
-      const stats = await AsyncStorage.getItem(STATS_KEY);
-      return stats ? JSON.parse(stats) : [];
+        const stats = await AsyncStorage.getItem(STATS_KEY);
+        return stats ? JSON.parse(stats) : [];
     } catch (error) {
-      console.log('statistics loading error', error);
-      return [];
+        console.log('statistics loading error', error);
+        return [];
     }
-  };
+};
 
-  // Helper functions to analyze statistics
+// Helper functions to analyze statistics
 export const getQuizStats = (statistics) => {
     if (!statistics.length) return {};
     
     return statistics.reduce((acc, attempt) => {
-      const { quizId } = attempt;
-      if (!acc[quizId]) {
-        acc[quizId] = {
-          totalAttempts: 0,
-          averagePercentage: 0,
-          averageTime: 0,
-          bestScore: 0,
-        };
-      }
-      
-      const current = acc[quizId];
-      current.totalAttempts += 1;
-      current.averagePercentage = (current.averagePercentage * (current.totalAttempts - 1) + attempt.percentage) / current.totalAttempts;
-      current.averageTime = (current.averageTime * (current.totalAttempts - 1) + attempt.timeSpent) / current.totalAttempts;
-      current.bestScore = Math.max(current.bestScore, attempt.percentage);
-      
-      return acc;
+        const { quizId } = attempt;
+        if (!acc[quizId]) {
+            acc[quizId] = {
+                totalAttempts: 0,
+                averagePercentage: 0,
+                averageTime: 0,
+                bestScore: 0,
+                highestScore: 0, // Add highest score tracking
+            };
+        }
+        
+        const current = acc[quizId];
+        current.totalAttempts += 1;
+        current.averagePercentage = (current.averagePercentage * (current.totalAttempts - 1) + attempt.percentage) / current.totalAttempts;
+        current.averageTime = (current.averageTime * (current.totalAttempts - 1) + attempt.timeSpent) / current.totalAttempts;
+        current.bestScore = Math.max(current.bestScore, attempt.percentage);
+        current.highestScore = Math.max(current.highestScore, attempt.score || 0); // Track highest score
+        
+        return acc;
     }, {});
-  };
+};
