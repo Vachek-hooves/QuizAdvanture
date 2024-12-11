@@ -8,6 +8,7 @@ const MapMarkerAnimation = () => {
       autoPlay
       loop
       style={styles.container}
+      speed={0.7}
     />
   );
 };
@@ -16,7 +17,7 @@ export default MapMarkerAnimation;
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
   },
 });

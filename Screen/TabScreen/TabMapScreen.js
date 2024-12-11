@@ -1,7 +1,15 @@
-import {Platform, StyleSheet, View, Animated, Text, TouchableOpacity} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  View,
+  Animated,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import MapView, {PROVIDER_DEFAULT, Polygon} from 'react-native-maps';
 import {poligonRegions} from '../../data/poligon';
 import React, {useRef, useState} from 'react';
+import {MapMarkerAnimation} from '../../components/ui/animation';
 
 const TabMapScreen = ({navigation}) => {
   const mapAnimation = useRef(new Animated.Value(0)).current;
@@ -10,7 +18,7 @@ const TabMapScreen = ({navigation}) => {
 
   const onRegionSelect = region => {
     setSelectedRegion(region);
-    
+
     mapRef.current.animateToRegion(
       {
         latitude: region.coordinates[0].latitude,
@@ -53,8 +61,7 @@ const TabMapScreen = ({navigation}) => {
           longitude: 24.0,
           latitudeDelta: 3,
           longitudeDelta: 4,
-        }}
-      >
+        }}>
         {poligonRegions.map((region, index) => (
           <Polygon
             key={index}
@@ -71,6 +78,7 @@ const TabMapScreen = ({navigation}) => {
 
       {selectedRegion && (
         <View style={styles.popupContainer}>
+          <MapMarkerAnimation />
           <View style={styles.popup}>
             <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
             <Text style={styles.popupText}>Region ID: {selectedRegion.id}</Text>
