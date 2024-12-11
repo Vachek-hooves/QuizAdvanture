@@ -82,7 +82,7 @@ const TabMapScreen = ({navigation}) => {
           style={styles.popupContainer}>
           <MapMarkerAnimation />
           <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
-          <Text style={styles.popupText}>Region ID: {selectedRegion.id}</Text>
+          {/* <Text style={styles.popupText}>Region ID: {selectedRegion.id}</Text> */}
           <TouchableOpacity
             onPress={handlePlayBattle}>
             <LinearGradient
