@@ -91,3 +91,32 @@ export const getQuizStats = (statistics) => {
         return acc;
     }, {});
 };
+
+export const unlockRegion = async (quiz, regionId, currentScore) => {
+  try {
+    // Save updated quiz
+    const updatedQuiz = quiz.map(q => 
+      String(q.id) === String(regionId) 
+        ? {...q, isLocked: false} 
+        : q
+    );
+    await AsyncStorage.setItem(QUIZ_KEY, JSON.stringify(updatedQuiz));
+
+    // Update statistics to subtract the unlock cost
+    const stats = await loadQuizStatistics();
+    const updatedStats = stats.map((stat, index) => 
+      index === stats.length - 1  // Update the last statistic entry
+        ? {...stat, score: currentScore - 35}
+        : stat
+    );
+    await AsyncStorage.setItem(STATS_KEY, JSON.stringify(updatedStats));
+
+    return {
+      updatedQuiz,
+      updatedStats
+    };
+  } catch (error) {
+    console.log('Error unlocking region:', error);
+    return null;
+  }
+};

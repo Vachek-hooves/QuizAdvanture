@@ -5,6 +5,7 @@ import {
   Animated,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import MapView, {PROVIDER_DEFAULT, Polygon} from 'react-native-maps';
 import {poligonRegions} from '../../data/poligon';
@@ -15,15 +16,18 @@ import {
 } from '../../components/ui/animation';
 import LinearGradient from 'react-native-linear-gradient';
 import {quiz as QuizData} from '../../data/quiz';
+import {useAppContext} from '../../store/context';
 
 const TabMapScreen = ({navigation}) => {
+  const {statistics = [], unlockRegion, quiz} = useAppContext();
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [showAnimation, setShowAnimation] = useState(false);
   const mapRef = useRef(null);
+  console.log(QuizData)
 
   const isRegionLocked = (regionId) => {
-    const quiz = QuizData.find(q => String(q.id) === String(regionId));
-    return quiz ? quiz.isLocked : true;
+    const quizItem = quiz?.find(q => String(q.id) === String(regionId));
+    return quizItem ? quizItem.isLocked : true;
   };
 
   const onRegionSelect = region => {
@@ -50,6 +54,31 @@ const TabMapScreen = ({navigation}) => {
       });
     }, 2500);
   };
+
+  const calculateTotalScore = () => {
+    return statistics.reduce((total, stat) => total + (stat.score || 0), 0);
+  };
+
+  const handleUnlockRegion = async () => {
+    const totalScore = calculateTotalScore();
+    if (totalScore >= 35) {
+      const success = await unlockRegion(selectedRegion.id);
+      if (success) {
+        Alert.alert(
+          "Region Unlocked!",
+          "You've successfully unlocked this region and spent 35 points.",
+          [{ text: "OK" }]
+        );
+      }
+    } else {
+      Alert.alert(
+        "Not Enough Points",
+        `You need 35 points to unlock this region. Current total: ${totalScore}`,
+        [{ text: "OK" }]
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       <MapView
@@ -64,11 +93,12 @@ const TabMapScreen = ({navigation}) => {
         }}>
         {poligonRegions.map((region, index) => {
           const locked = isRegionLocked(region.id);
+          
           return (
             <Polygon
               key={index}
               coordinates={region.coordinates}
-              fillColor={locked ? 'rgba(169, 169, 169, 0.5)' : region.fillColor}
+              fillColor={locked ? 'rgba(0, 0, 0, 0.6)' : region.fillColor}
               strokeColor={locked ? '#666666' : region.strokeColor}
               strokeWidth={region.strokeWidth}
               onPress={() => onRegionSelect(region)}
@@ -86,25 +116,27 @@ const TabMapScreen = ({navigation}) => {
             colors={['rgba(12, 45, 72, 0.95)', 'rgba(20, 93, 160, 0.95)']}
             style={styles.popupContainer}>
             <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
-            <TouchableOpacity 
-              onPress={handlePlayBattle}
-              disabled={isRegionLocked(selectedRegion.id)}>
-              <LinearGradient
-                colors={isRegionLocked(selectedRegion.id) 
-                  ? ['#666666', '#444444'] 
-                  : ['#2E8BC0', '#1A5F7A']}
-                style={[
-                  styles.playButton,
-                  isRegionLocked(selectedRegion.id) && styles.playButtonLocked
-                ]}>
-                <Text style={[
-                  styles.playButtonText,
-                  isRegionLocked(selectedRegion.id) && styles.playButtonTextLocked
-                ]}>
-                  {isRegionLocked(selectedRegion.id) ? 'Region Locked' : 'Play Battle'}
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
+            {isRegionLocked(selectedRegion.id) ? (
+              <TouchableOpacity onPress={handleUnlockRegion}>
+                <LinearGradient
+                  colors={['#2E8BC0', '#1A5F7A']}
+                  style={styles.playButton}>
+                  <Text style={styles.playButtonText}>
+                    Unlock for 35 points
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={handlePlayBattle}>
+                <LinearGradient
+                  colors={['#2E8BC0', '#1A5F7A']}
+                  style={styles.playButton}>
+                  <Text style={styles.playButtonText}>
+                    Play Battle
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
           </LinearGradient>
         </View>
       )}
