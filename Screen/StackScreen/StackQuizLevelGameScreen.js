@@ -40,6 +40,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
     new Animated.Value(0),
     new Animated.Value(0),
   ]);
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
 
   const QUIZ = quiz.find(q => String(q.id) === String(regionId));
 
@@ -72,23 +73,18 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
     setGameStartTime(Date.now());
   };
 
-  const handleAnswer = selectedAnswer => {
+  const handleAnswer = (selectedAnswer, index) => {
+    setSelectedOptionIndex(index);
     const currentQuestion = QUIZ.levelQuestions[currentQuestionIndex];
     const isCorrect = selectedAnswer === currentQuestion.answer;
-
+    
     if (isCorrect) {
       setScore(prev => prev + 1);
-      setBackgroundColors([
-        'rgba(76, 175, 80, 0.35)',
-        'rgba(76, 175, 80, 0.65)',
-      ]); // Green
+      setBackgroundColors(['rgba(76, 175, 80, 0.35)', 'rgba(76, 175, 80, 0.65)']); // Green
     } else {
-      setBackgroundColors([
-        'rgba(244, 67, 54, 0.35)',
-        'rgba(244, 67, 54, 0.65)',
-      ]); // Red
+      setBackgroundColors(['rgba(244, 67, 54, 0.35)', 'rgba(244, 67, 54, 0.65)']); // Red
     }
-
+    
     setIsAnswerCorrect(isCorrect);
 
     // Start fade in animation
@@ -98,19 +94,16 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
       useNativeDriver: true,
     }).start();
 
-    // Set timeout to move to next question
     setTimeout(() => {
-      // Reset background color and fade out animation
+      // Reset states
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }).start(() => {
         setIsAnswerCorrect(null);
-        setBackgroundColors([
-          'rgba(12, 45, 72, 0.35)',
-          'rgba(20, 93, 160, 0.65)',
-        ]); // Reset to default blue
+        setSelectedOptionIndex(null);
+        setBackgroundColors(['rgba(12, 45, 72, 0.35)', 'rgba(20, 93, 160, 0.65)']);
         if (currentQuestionIndex < QUIZ.levelQuestions.length - 1) {
           setCurrentQuestionIndex(prev => prev + 1);
         } else {
@@ -243,39 +236,52 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
               </Text>
             </LinearGradient>
             <View style={styles.optionsContainer}>
-              {QUIZ.levelQuestions[currentQuestionIndex].options.map(
-                (option, index) => (
-                  <Animated.View
-                    key={index}
-                    style={{
-                      opacity: optionAnimations[index],
-                      transform: [
-                        {
-                          translateY: optionAnimations[index].interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [50, 0], // Slide up from below
-                          }),
+              {QUIZ.levelQuestions[currentQuestionIndex].options.map((option, index) => (
+                <Animated.View
+                  key={index}
+                  style={{
+                    opacity: optionAnimations[index],
+                    transform: [
+                      {
+                        translateY: optionAnimations[index].interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [50, 0],
+                        }),
+                      },
+                      {
+                        scale: optionAnimations[index].interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [0.8, 1],
+                        }),
+                      },
+                    ],
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => handleAnswer(option, index)}
+                    disabled={isAnswerCorrect !== null}>
+                    <LinearGradient
+                      colors={['#2E8BC0', '#1A5F7A']}
+                      style={[
+                        styles.optionButton,
+                        selectedOptionIndex === index && {
+                          borderColor: isAnswerCorrect ? '#4CAF50' : '#F44336',
+                          borderWidth: 2,
                         },
-                        {
-                          scale: optionAnimations[index].interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [0.8, 1], // Scale up
-                          }),
-                        },
-                      ],
-                    }}>
-                    <TouchableOpacity
-                      onPress={() => handleAnswer(option)}
-                      disabled={isAnswerCorrect !== null}>
-                      <LinearGradient
-                        colors={['#2E8BC0', '#1A5F7A']}
-                        style={styles.optionButton}>
-                        <Text style={styles.optionText}>{option}</Text>
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  </Animated.View>
-                ),
-              )}
+                      ]}>
+                      <Text
+                        style={[
+                          styles.optionText,
+                          selectedOptionIndex === index && {
+                            color: isAnswerCorrect ? '#4CAF50' : '#F44336',
+                            fontWeight: 'bold',
+                          },
+                        ]}>
+                        {option}
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </Animated.View>
+              ))}
             </View>
           </ScrollView>
           <GoBack />
@@ -426,6 +432,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
     paddingVertical: 12,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
   },
   resultContainer: {
     flex: 1,
