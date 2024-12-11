@@ -150,10 +150,26 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
           <WelcomeModal />
           <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.progressContainer}>
-              <Text style={styles.progressText}>
-                Question {currentQuestionIndex + 1}/{QUIZ.levelQuestions.length}
-              </Text>
-              <Text style={styles.scoreText}>Score: {score}</Text>
+              <View style={styles.progressBarContainer}>
+                <View
+                  style={[
+                    styles.progressBar,
+                    {
+                      width: `${
+                        (currentQuestionIndex / QUIZ.levelQuestions.length) *
+                        100
+                      }%`,
+                    },
+                  ]}
+                />
+              </View>
+              <View style={styles.progressTextContainer}>
+                <Text style={styles.progressText}>
+                  Question {currentQuestionIndex + 1}/
+                  {QUIZ.levelQuestions.length}
+                </Text>
+                <Text style={styles.scoreText}>Score: {score}</Text>
+              </View>
             </View>
             <LinearGradient
               colors={['rgba(46, 139, 192, 0.9)', 'rgba(26, 95, 122, 0.9)']}
@@ -215,7 +231,7 @@ const styles = StyleSheet.create({
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 5,
     marginVertical: 20,
-    marginTop:'80%'
+    marginTop: '80%',
   },
   modalWelcomeText: {
     fontSize: 18,
@@ -251,8 +267,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   progressContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     marginBottom: 20,
     backgroundColor: 'rgba(46, 139, 192, 0.2)',
     padding: 15,
@@ -260,13 +274,30 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#B4E0FF',
   },
+  progressBarContainer: {
+    height: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 4,
+    overflow: 'hidden',
+    marginBottom: 10,
+  },
+  progressBar: {
+    height: '100%',
+    backgroundColor: '#4CAF50', // Green color
+    borderRadius: 4,
+  },
+  progressTextContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   progressText: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#FFFFFF',
     fontWeight: 'bold',
   },
   scoreText: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#B4E0FF',
     fontWeight: 'bold',
   },
@@ -277,6 +308,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#B4E0FF',
     // paddingVertical: 10,
+    height: '20%',
+    justifyContent: 'center',
   },
   questionText: {
     fontSize: 20,
@@ -295,10 +328,10 @@ const styles = StyleSheet.create({
     borderColor: '#B4E0FF',
   },
   optionText: {
-    fontSize: 18,
+    fontSize: 22,
     color: '#FFFFFF',
     textAlign: 'center',
-    paddingVertical: 10,
+    paddingVertical: 12,
   },
   resultContainer: {
     flex: 1,
@@ -310,6 +343,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(46, 139, 192, 0.2)',
     borderWidth: 2,
     borderColor: '#B4E0FF',
+    paddingTop: '30%',
   },
   resultTitle: {
     fontSize: 36,
@@ -319,11 +353,13 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 5,
+    textAlign: 'center',
   },
   resultScore: {
     fontSize: 24,
     color: '#E6F3FF',
     marginBottom: 10,
+    textAlign: 'center',
   },
   resultPercentage: {
     fontSize: 56,
@@ -333,6 +369,7 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 5,
+    textAlign: 'center',
   },
   button: {
     // padding: 15,
@@ -341,6 +378,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1,
     borderColor: '#B4E0FF',
+    marginVertical: 20,
   },
   buttonText: {
     color: '#FFFFFF',
@@ -350,6 +388,8 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 3,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   wariorImage: {
     // width: 350,
