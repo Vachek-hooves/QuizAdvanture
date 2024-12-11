@@ -9,6 +9,7 @@ import {
   Modal,
   ImageBackground,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {useAppContext} from '../../store/context';
 
 const StackQuizLevelGameScreen = ({route, navigation}) => {
@@ -64,21 +65,29 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
       visible={showWelcome}
       onRequestClose={() => setShowWelcome(false)}>
       <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
+        <LinearGradient
+          colors={['#1A5F7A', '#2E8BC0']}
+          style={styles.modalContent}>
           <Text style={styles.modalTitle}>{QUIZ.name}</Text>
           <Text style={styles.modalWelcomeText}>{QUIZ.welcome}</Text>
-          <TouchableOpacity style={styles.startButton} onPress={startGame}>
-            <Text style={styles.startButtonText}>Start Battle</Text>
+          <TouchableOpacity 
+            onPress={startGame}
+            style={styles.startButtonContainer}>
+            <LinearGradient
+              colors={['#145DA0', '#0C2D48']}
+              style={styles.startButton}>
+              <Text style={styles.startButtonText}>Start Battle</Text>
+            </LinearGradient>
           </TouchableOpacity>
-        </View>
+        </LinearGradient>
       </View>
     </Modal>
   );
 
   if (showResult) {
     return (
-      <ImageBackground
-        // source={require('../../assets/images/ancient-pattern.png')}
+      <LinearGradient
+        colors={['#0C2D48', '#145DA0']}
         style={styles.container}>
         <SafeAreaView style={styles.container}>
           <View style={styles.resultContainer}>
@@ -90,24 +99,30 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
               <Text style={styles.resultPercentage}>
                 {Math.round((score / QUIZ.levelQuestions.length) * 100)}%
               </Text>
-              <TouchableOpacity style={styles.button} onPress={handlePlayAgain}>
-                <Text style={styles.buttonText}>Fight Again</Text>
+              <TouchableOpacity onPress={handlePlayAgain}>
+                <LinearGradient
+                  colors={['#2E8BC0', '#1A5F7A']}
+                  style={styles.button}>
+                  <Text style={styles.buttonText}>Fight Again</Text>
+                </LinearGradient>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, styles.mapButton]}
-                onPress={() => navigation.navigate('TabMap')}>
-                <Text style={styles.buttonText}>Return to Map</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('TabMap')}>
+                <LinearGradient
+                  colors={['#145DA0', '#0C2D48']}
+                  style={[styles.button, styles.mapButton]}>
+                  <Text style={styles.buttonText}>Return to Map</Text>
+                </LinearGradient>
               </TouchableOpacity>
             </View>
           </View>
         </SafeAreaView>
-      </ImageBackground>
+      </LinearGradient>
     );
   }
 
   return (
-    <ImageBackground
-      // source={require('../../assets/images/ancient-pattern.png')}
+    <LinearGradient
+      colors={['#0C2D48', '#145DA0']}
       style={styles.container}>
       <SafeAreaView style={styles.container}>
         <WelcomeModal />
@@ -118,22 +133,29 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
             </Text>
             <Text style={styles.scoreText}>Score: {score}</Text>
           </View>
-          <View style={styles.questionContainer}>
-            <Text style={styles.questionText}>{QUIZ.levelQuestions[currentQuestionIndex].question}</Text>
-          </View>
+          <LinearGradient
+            colors={['rgba(46, 139, 192, 0.9)', 'rgba(26, 95, 122, 0.9)']}
+            style={styles.questionContainer}>
+            <Text style={styles.questionText}>
+              {QUIZ.levelQuestions[currentQuestionIndex].question}
+            </Text>
+          </LinearGradient>
           <View style={styles.optionsContainer}>
             {QUIZ.levelQuestions[currentQuestionIndex].options.map((option, index) => (
               <TouchableOpacity
                 key={index}
-                style={styles.optionButton}
                 onPress={() => handleAnswer(option)}>
-                <Text style={styles.optionText}>{option}</Text>
+                <LinearGradient
+                  colors={['#2E8BC0', '#1A5F7A']}
+                  style={styles.optionButton}>
+                  <Text style={styles.optionText}>{option}</Text>
+                </LinearGradient>
               </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
       </SafeAreaView>
-    </ImageBackground>
+    </LinearGradient>
   );
 };
 
@@ -143,45 +165,49 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    backgroundColor: 'rgba(12, 45, 72, 0.95)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#F5E6CA',
-    borderRadius: 20,
-    padding: 30,
     width: '90%',
+    padding: 30,
+    borderRadius: 20,
     alignItems: 'center',
-    borderWidth: 3,
-    borderColor: '#B4A269',
+    borderWidth: 2,
+    borderColor: '#B4E0FF',
   },
   modalTitle: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#1A5F7A',
+    color: '#FFFFFF',
     marginBottom: 20,
     textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 5,
   },
   modalWelcomeText: {
     fontSize: 18,
-    color: '#333',
+    color: '#E6F3FF',
     textAlign: 'center',
     marginBottom: 30,
     lineHeight: 24,
   },
   startButton: {
-    backgroundColor: '#C84630',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 25,
-    borderWidth: 2,
-    borderColor: '#B4A269',
+    borderWidth: 1,
+    borderColor: '#B4E0FF',
   },
   startButtonText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 20,
     fontWeight: 'bold',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -191,95 +217,102 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
-    backgroundColor: 'rgba(245, 230, 202, 0.9)',
+    backgroundColor: 'rgba(46, 139, 192, 0.2)',
     padding: 15,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#B4A269',
+    borderWidth: 1,
+    borderColor: '#B4E0FF',
   },
   progressText: {
     fontSize: 18,
-    color: '#1A5F7A',
+    color: '#FFFFFF',
     fontWeight: 'bold',
   },
   scoreText: {
     fontSize: 18,
-    color: '#C84630',
+    color: '#B4E0FF',
     fontWeight: 'bold',
   },
   questionContainer: {
-    backgroundColor: 'rgba(245, 230, 202, 0.9)',
-    padding: 20,
+    // padding: 20,
     borderRadius: 15,
     marginBottom: 20,
-    borderWidth: 2,
-    borderColor: '#B4A269',
+    borderWidth: 1,
+    borderColor: '#B4E0FF',
+    // paddingVertical: 10,
   },
   questionText: {
     fontSize: 20,
-    color: '#333',
+    color: '#FFFFFF',
     lineHeight: 28,
+    padding: 15,
+    textAlign: 'center',
   },
   optionsContainer: {
-    gap: 12,
+    gap: 16,
   },
   optionButton: {
-    backgroundColor: 'rgba(245, 230, 202, 0.9)',
-    padding: 15,
+    // padding: 10,
     borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#B4A269',
+    borderWidth: 1,
+    borderColor: '#B4E0FF',
   },
   optionText: {
     fontSize: 18,
-    color: '#333',
+    color: '#FFFFFF',
     textAlign: 'center',
+    paddingVertical: 10,
   },
   resultContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: 'rgba(245, 230, 202, 0.9)',
     margin: 20,
     borderRadius: 20,
-    borderWidth: 3,
-    borderColor: '#B4A269',
+    backgroundColor: 'rgba(46, 139, 192, 0.2)',
+    borderWidth: 2,
+    borderColor: '#B4E0FF',
   },
   resultTitle: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
-    color: '#1A5F7A',
+    color: '#FFFFFF',
     marginBottom: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 5,
   },
   resultScore: {
     fontSize: 24,
-    color: '#333',
+    color: '#E6F3FF',
     marginBottom: 10,
   },
   resultPercentage: {
     fontSize: 56,
     fontWeight: 'bold',
-    color: '#C84630',
+    color: '#B4E0FF',
     marginBottom: 30,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 5,
   },
   button: {
-    backgroundColor: '#C84630',
     padding: 15,
     borderRadius: 25,
-    width: '100%',
+    width: 280,
     marginBottom: 10,
-    borderWidth: 2,
-    borderColor: '#B4A269',
-  },
-  mapButton: {
-    backgroundColor: '#1A5F7A',
+    borderWidth: 1,
+    borderColor: '#B4E0FF',
   },
   buttonText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
   },
 });
 
