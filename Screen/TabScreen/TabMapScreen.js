@@ -52,7 +52,7 @@ const TabMapScreen = ({navigation}) => {
           latitude: 37.9838,
           longitude: 23.7275,
           latitudeDelta: 5,
-          longitudeDelta: 3,
+          longitudeDelta: 4,
         }}
       >
         {poligonRegions.map((region, index) => (
