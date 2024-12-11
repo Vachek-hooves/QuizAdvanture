@@ -29,6 +29,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [wariorImage, setWariorImage] = useState(null);
   const [mainImage, setMainImage] = useState(null);
+  const [quizData, setQuizData] = useState(null);
   const [backgroundColors, setBackgroundColors] = useState([
     'rgba(12, 45, 72, 0.35)',
     'rgba(20, 93, 160, 0.65)',
@@ -43,13 +44,13 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   ]);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
 
-  const QUIZ = quiz.find(q => String(q.id) === String(regionId));
-
+  // Load quiz data immediately when component mounts
   useEffect(() => {
-    const quizData = QuizData.find(q => String(q.id) === String(regionId));
-    if (quizData) {
-      setMainImage(quizData.image);
-      setWariorImage(quizData.warior);
+    const currentQuiz = QuizData.find(q => String(q.id) === String(regionId));
+    if (currentQuiz) {
+      setQuizData(currentQuiz);
+      setMainImage(currentQuiz.image);
+      setWariorImage(currentQuiz.warior);
     }
   }, [regionId]);
 
@@ -76,7 +77,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
 
   const handleAnswer = (selectedAnswer, index) => {
     setSelectedOptionIndex(index);
-    const currentQuestion = QUIZ.levelQuestions[currentQuestionIndex];
+    const currentQuestion = quizData.levelQuestions[currentQuestionIndex];
     const isCorrect = selectedAnswer === currentQuestion.answer;
 
     if (isCorrect) {
@@ -114,7 +115,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
           'rgba(12, 45, 72, 0.35)',
           'rgba(20, 93, 160, 0.65)',
         ]);
-        if (currentQuestionIndex < QUIZ.levelQuestions.length - 1) {
+        if (currentQuestionIndex < quizData.levelQuestions.length - 1) {
           setCurrentQuestionIndex(prev => prev + 1);
         } else {
           const timeSpent = Math.floor((Date.now() - gameStartTime) / 1000);
@@ -132,12 +133,9 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
     setGameStartTime(Date.now());
   };
 
-  if (!QUIZ) {
-    return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
-      </View>
-    );
+  // Don't render anything until quiz data is loaded
+  if (!quizData) {
+    return null;
   }
 
   const WelcomeModal = () => (
@@ -154,8 +152,8 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
           <LinearGradient
             colors={['#1A5F7A' + 30, '#2E8BC0' + 50, '#2E8BC0' + 70]}
             style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{QUIZ.name}</Text>
-            <Text style={styles.modalWelcomeText}>{QUIZ.welcome}</Text>
+            <Text style={styles.modalTitle}>{quizData.name}</Text>
+            <Text style={styles.modalWelcomeText}>{quizData.welcome}</Text>
             <TouchableOpacity
               onPress={startGame}
               style={styles.startButtonContainer}>
@@ -182,10 +180,10 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
               <Text style={styles.resultTitle}>Battle Completed!</Text>
               <View style={styles.scrollContainer}>
                 <Text style={styles.resultScore}>
-                  Your Score: {score}/{QUIZ.levelQuestions.length}
+                  Your Score: {score}/{quizData.levelQuestions.length}
                 </Text>
                 <Text style={styles.resultPercentage}>
-                  {Math.round((score / QUIZ.levelQuestions.length) * 100)}%
+                  {Math.round((score / quizData.levelQuestions.length) * 100)}%
                 </Text>
                 <TouchableOpacity onPress={handlePlayAgain}>
                   <LinearGradient
@@ -223,7 +221,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
                     styles.progressBar,
                     {
                       width: `${
-                        (currentQuestionIndex / QUIZ.levelQuestions.length) *
+                        (currentQuestionIndex / quizData.levelQuestions.length) *
                         100
                       }%`,
                     },
@@ -233,7 +231,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
               <View style={styles.progressTextContainer}>
                 <Text style={styles.progressText}>
                   Question {currentQuestionIndex + 1}/
-                  {QUIZ.levelQuestions.length}
+                  {quizData.levelQuestions.length}
                 </Text>
                 <Text style={styles.scoreText}>Score: {score}</Text>
               </View>
@@ -242,11 +240,11 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
               colors={['rgba(46, 139, 192, 0.9)', 'rgba(26, 95, 122, 0.9)']}
               style={styles.questionContainer}>
               <Text style={styles.questionText}>
-                {QUIZ.levelQuestions[currentQuestionIndex].question}
+                {quizData.levelQuestions[currentQuestionIndex].question}
               </Text>
             </LinearGradient>
             <View style={styles.optionsContainer}>
-              {QUIZ.levelQuestions[currentQuestionIndex].options.map(
+              {quizData.levelQuestions[currentQuestionIndex].options.map(
                 (option, index) => (
                   <Animated.View
                     key={index}
