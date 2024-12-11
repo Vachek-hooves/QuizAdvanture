@@ -142,15 +142,14 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
       animationType="fade"
       transparent={true}
       visible={showWelcome}
-      onRequestClose={() => setShowWelcome(false)}
-      style={styles.modalOverlay}>
+      onRequestClose={() => setShowWelcome(false)}>
       <View style={styles.modalOverlay}>
         <ImageBackground
           source={wariorImage}
           style={styles.wariorImage}
           resizeMode="cover">
           <LinearGradient
-            colors={['#1A5F7A' + 30, '#2E8BC0' + 50, '#2E8BC0' + 70]}
+            colors={['#1A5F7A'+30, '#2E8BC0'+50, '#2E8BC0'+70]}
             style={styles.modalContent}>
             <Text style={styles.modalTitle}>{QUIZ.name}</Text>
             <Text style={styles.modalWelcomeText}>{QUIZ.welcome}</Text>
@@ -158,7 +157,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
               onPress={startGame}
               style={styles.startButtonContainer}>
               <LinearGradient
-                colors={['#145DA0' + 90, '#0C2D48' + 90]}
+                colors={['#145DA0'+90, '#0C2D48'+90]}
                 style={styles.startButton}>
                 <Text style={styles.startButtonText}>Start Battle</Text>
               </LinearGradient>
