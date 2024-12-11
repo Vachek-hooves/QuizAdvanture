@@ -9,6 +9,7 @@ import {
   Modal,
   ImageBackground,
   Dimensions,
+  Animated,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppContext} from '../../store/context';
@@ -25,6 +26,9 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [wariorImage, setWariorImage] = useState(null);
   const [mainImage, setMainImage] = useState(null);
+  const [backgroundColors, setBackgroundColors] = useState(['rgba(12, 45, 72, 0.35)', 'rgba(20, 93, 160, 0.65)']);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
+  const [fadeAnim] = useState(new Animated.Value(0));
 
   const QUIZ = quiz.find(q => String(q.id) === String(regionId));
 
@@ -43,17 +47,43 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
 
   const handleAnswer = selectedAnswer => {
     const currentQuestion = QUIZ.levelQuestions[currentQuestionIndex];
-    if (selectedAnswer === currentQuestion.answer) {
+    const isCorrect = selectedAnswer === currentQuestion.answer;
+    
+    if (isCorrect) {
       setScore(prev => prev + 1);
-    }
-
-    if (currentQuestionIndex < QUIZ.levelQuestions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setBackgroundColors(['rgba(76, 175, 80, 0.35)', 'rgba(76, 175, 80, 0.65)']); // Green
     } else {
-      const timeSpent = Math.floor((Date.now() - gameStartTime) / 1000);
-      saveQuizResult(regionId, score + 1, timeSpent);
-      setShowResult(true);
+      setBackgroundColors(['rgba(244, 67, 54, 0.35)', 'rgba(244, 67, 54, 0.65)']); // Red
     }
+    
+    setIsAnswerCorrect(isCorrect);
+
+    // Start fade in animation
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+
+    // Set timeout to move to next question
+    setTimeout(() => {
+      // Reset background color and fade out animation
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => {
+        setIsAnswerCorrect(null);
+        setBackgroundColors(['rgba(12, 45, 72, 0.35)', 'rgba(20, 93, 160, 0.65)']); // Reset to default blue
+        if (currentQuestionIndex < QUIZ.levelQuestions.length - 1) {
+          setCurrentQuestionIndex(prev => prev + 1);
+        } else {
+          const timeSpent = Math.floor((Date.now() - gameStartTime) / 1000);
+          saveQuizResult(regionId, score + 1, timeSpent);
+          setShowResult(true);
+        }
+      });
+    }, 1500);
   };
 
   const handlePlayAgain = () => {
@@ -144,7 +174,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
   return (
     <ImageBackground source={mainImage} style={styles.container}>
       <LinearGradient
-        colors={['rgba(12, 45, 72, 0.35)', 'rgba(20, 93, 160, 0.65)']}
+        colors={backgroundColors}
         style={styles.container}>
         <SafeAreaView style={styles.container}>
           <WelcomeModal />
