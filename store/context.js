@@ -6,15 +6,23 @@ import {
   getQuizStats,
   unlockRegion as unlockRegionUtil,
   QUIZ_KEY,
-  loadEnciclopediaFromStorage
+  loadEnciclopediaFromStorage,
 } from './utils';
-const AppContext = createContext({statistics: []});
+
+const AppContext = createContext({
+  statistics: [],
+  enciclopedia: [],
+  quiz: [],
+  saveQuizResult: () => {},
+  getStatistics: () => {},
+  unlockRegion: () => {},
+ 
+});
 
 export const ProviderContext = ({children}) => {
   const [quiz, setQuiz] = useState();
   const [statistics, setStatistics] = useState([]);
   const [enciclopedia, setEnciclopedia] = useState([]);
-
 
   useEffect(() => {
     const loadData = async () => {
@@ -43,10 +51,13 @@ export const ProviderContext = ({children}) => {
 
   const getStatistics = () => getQuizStats(statistics);
 
-  const unlockRegion = async (regionId) => {
-    const currentScore = statistics.reduce((total, stat) => total + (stat.score || 0), 0);
+  const unlockRegion = async regionId => {
+    const currentScore = statistics.reduce(
+      (total, stat) => total + (stat.score || 0),
+      0,
+    );
     const result = await unlockRegionUtil(quiz, regionId, currentScore);
-    
+
     if (result) {
       setQuiz(result.updatedQuiz);
       setStatistics(result.updatedStats);
@@ -58,6 +69,7 @@ export const ProviderContext = ({children}) => {
   const value = {
     quiz,
     statistics,
+    enciclopedia,
     saveQuizResult,
     getStatistics,
     unlockRegion,
