@@ -14,16 +14,12 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchImageLibrary} from 'react-native-image-picker';
-import ProfileAnimagtion from '../../components/ui/animation/ProfileAnimagtion';
 
 const TabProfile = () => {
-  const [userData, setUserData] = useState({
-    name: '',
-    image: null,
-    dateCreated: '',
-  });
+  const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState('');
+  const [tempImage, setTempImage] = useState(null);
 
   useEffect(() => {
     loadUserData();
@@ -36,26 +32,10 @@ const TabProfile = () => {
         const data = JSON.parse(jsonValue);
         setUserData(data);
         setTempName(data.name);
+        setTempImage(data.image);
       }
     } catch (e) {
       console.error('Error loading user data:', e);
-    }
-  };
-
-  const saveUserData = async () => {
-    try {
-      const newUserData = {
-        ...userData,
-        name: tempName,
-        dateCreated: userData.dateCreated || new Date().toISOString(),
-      };
-      await AsyncStorage.setItem('@user_data', JSON.stringify(newUserData));
-      setUserData(newUserData);
-      setIsEditing(false);
-      Alert.alert('Success', 'Profile updated successfully!');
-    } catch (e) {
-      console.error('Error saving user data:', e);
-      Alert.alert('Error', 'Failed to save profile data');
     }
   };
 
@@ -68,24 +48,60 @@ const TabProfile = () => {
     };
 
     launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        return;
-      }
-
+      if (response.didCancel) return;
       if (response.errorCode) {
         Alert.alert('Error', 'Image picker error: ' + response.errorMessage);
         return;
       }
-
       if (response.assets && response.assets[0]) {
-        const newUserData = {
-          ...userData,
-          image: `data:image/jpeg;base64,${response.assets[0].base64}`,
-        };
-        setUserData(newUserData);
-        saveUserData();
+        const imageUri = `data:image/jpeg;base64,${response.assets[0].base64}`;
+        setTempImage(imageUri);
       }
     });
+  };
+
+  const saveUserData = async () => {
+    if (!tempName.trim()) {
+      Alert.alert('Error', 'Please enter your name');
+      return;
+    }
+
+    if (!tempImage) {
+      Alert.alert('Error', 'Please select a profile image');
+      return;
+    }
+
+    try {
+      const newUserData = {
+        name: tempName,
+        image: tempImage,
+        dateCreated: new Date().toISOString(),
+      };
+      await AsyncStorage.setItem('@user_data', JSON.stringify(newUserData));
+      setUserData(newUserData);
+      setIsEditing(false);
+      Alert.alert('Success', 'Profile saved successfully!');
+    } catch (e) {
+      console.error('Error saving user data:', e);
+      Alert.alert('Error', 'Failed to save profile data');
+    }
+  };
+
+  const updateUserData = async () => {
+    try {
+      const updatedData = {
+        ...userData,
+        name: tempName,
+        image: tempImage,
+      };
+      await AsyncStorage.setItem('@user_data', JSON.stringify(updatedData));
+      setUserData(updatedData);
+      setIsEditing(false);
+      Alert.alert('Success', 'Profile updated successfully!');
+    } catch (e) {
+      console.error('Error updating user data:', e);
+      Alert.alert('Error', 'Failed to update profile data');
+    }
   };
 
   const deleteProfile = async () => {
@@ -93,22 +109,16 @@ const TabProfile = () => {
       'Delete Profile',
       'Are you sure you want to delete your profile?',
       [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
+        {text: 'Cancel', style: 'cancel'},
         {
           text: 'Delete',
           style: 'destructive',
           onPress: async () => {
             try {
               await AsyncStorage.removeItem('@user_data');
-              setUserData({
-                name: '',
-                image: null,
-                dateCreated: '',
-              });
+              setUserData(null);
               setTempName('');
+              setTempImage(null);
               Alert.alert('Success', 'Profile deleted successfully!');
             } catch (e) {
               console.error('Error deleting profile:', e);
@@ -130,23 +140,34 @@ const TabProfile = () => {
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
             <View style={styles.profileContainer}>
-              <TouchableOpacity
-                onPress={selectImage}
-                style={styles.imageContainer}>
-                {userData.image ? (
-                  <Image
-                    source={{uri: userData.image}}
-                    style={styles.profileImage}
-                  />
+              <TouchableOpacity onPress={selectImage} style={styles.imageContainer}>
+                {tempImage ? (
+                  <Image source={{uri: tempImage}} style={styles.profileImage} />
                 ) : (
                   <View style={styles.placeholderImage}>
                     <Text style={styles.placeholderText}>Add Photo</Text>
                   </View>
                 )}
               </TouchableOpacity>
-           
 
-              {isEditing ? (
+              {!userData ? (
+                // New User View
+                <View style={styles.editContainer}>
+                  <TextInput
+                    style={styles.input}
+                    value={tempName}
+                    onChangeText={setTempName}
+                    placeholder="Enter your name"
+                    placeholderTextColor="#B4B4B4"
+                  />
+                  <TouchableOpacity
+                    style={[styles.button, styles.saveButton]}
+                    onPress={saveUserData}>
+                    <Text style={styles.buttonText}>Save Profile</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : isEditing ? (
+                // Edit Mode View
                 <View style={styles.editContainer}>
                   <TextInput
                     style={styles.input}
@@ -158,7 +179,7 @@ const TabProfile = () => {
                   <View style={styles.buttonContainer}>
                     <TouchableOpacity
                       style={[styles.button, styles.saveButton]}
-                      onPress={saveUserData}>
+                      onPress={updateUserData}>
                       <Text style={styles.buttonText}>Save</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -166,16 +187,16 @@ const TabProfile = () => {
                       onPress={() => {
                         setIsEditing(false);
                         setTempName(userData.name);
+                        setTempImage(userData.image);
                       }}>
                       <Text style={styles.buttonText}>Cancel</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
               ) : (
+                // Display Mode View
                 <View style={styles.infoContainer}>
-                  <Text style={styles.nameText}>
-                    {userData.name || 'Add Your Name'}
-                  </Text>
+                  <Text style={styles.nameText}>{userData.name}</Text>
                   {userData.dateCreated && (
                     <Text style={styles.dateText}>
                       Member since:{' '}
@@ -214,21 +235,21 @@ const styles = StyleSheet.create({
   profileContainer: {
     padding: 20,
     alignItems: 'center',
-    marginTop: '40%',
+    // marginTop: '10%',
   },
   imageContainer: {
     marginBottom: 20,
   },
   profileImage: {
-    width: 150,
-    height: 150,
+    width: 250,
+    height: 250,
     borderRadius: 75,
     borderWidth: 3,
     borderColor: '#B4E0FF',
   },
   placeholderImage: {
-    width: 150,
-    height: 150,
+    width: 250,
+    height: 250,
     borderRadius: 75,
     backgroundColor: 'rgba(180, 224, 255, 0.3)',
     justifyContent: 'center',
