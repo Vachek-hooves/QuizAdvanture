@@ -72,7 +72,8 @@ const TabNavigation = () => {
                 padding: 5,
                 borderRadius: 10,
               }}>
-              <Text style={{fontSize: 32, color}}>🗺️</Text>
+              {/* <Text style={{fontSize: 32, color}}>🗺️</Text> */}
+              <Text style={{fontSize: 32, color}}>🏛️</Text>
             </View>
           ),
         }}
@@ -89,7 +90,8 @@ const TabNavigation = () => {
                 padding: 5,
                 borderRadius: 10,
               }}>
-              <Text style={{fontSize: 32, color}}>📊</Text>
+              {/* <Text style={{fontSize: 32, color}}>📊</Text> */}
+              <Text style={{fontSize: 32, color}}>🏆</Text>
             </View>
           ),
         }}
@@ -106,7 +108,8 @@ const TabNavigation = () => {
                 padding: 5,
                 borderRadius: 10,
               }}>
-              <Text style={{fontSize: 32, color}}>📚</Text>
+              {/* <Text style={{fontSize: 32, color}}>📚</Text> */}
+              <Text style={{fontSize: 32, color}}>📜</Text>
             </View>
           ),
         }}
