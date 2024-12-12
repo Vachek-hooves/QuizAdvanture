@@ -15,7 +15,7 @@ import {useAppContext} from '../../store/context';
 
 const {width} = Dimensions.get('window');
 
-const ArticleCard = ({item, onUnlock, totalScore}) => {
+const ArticleCard = ({item, onUnlock, totalScore,onArticlePress}) => {
   const handlePress = () => {
     if (item.isLocked) {
       Alert.alert(
@@ -33,9 +33,10 @@ const ArticleCard = ({item, onUnlock, totalScore}) => {
         ],
       );
     } else {
+      onArticlePress(item);
       // Handle navigation to full article view
       // You can add navigation here later
-      Alert.alert('Article Content', item.content);
+      // Alert.alert('Article Content', item.content);
     }
   };
 
@@ -83,7 +84,7 @@ const ArticleCard = ({item, onUnlock, totalScore}) => {
   );
 };
 
-const TabArticles = () => {
+const TabArticles = ({navigation}) => {
   const {enciclopedia, statistics, unlockEnciclopedia} = useAppContext();
 
   const calculateTotalScore = () => {
@@ -109,6 +110,9 @@ const TabArticles = () => {
       );
     }
   };
+  const handleArticlePress = (article) => {
+    navigation.navigate('StackArticleDetails', { article });
+  };
 
   return (
     <ImageBackground
@@ -127,6 +131,7 @@ const TabArticles = () => {
                   item={item}
                   onUnlock={handleUnlock}
                   totalScore={calculateTotalScore()}
+                  onArticlePress={handleArticlePress}
                 />
               ))}
             </View>

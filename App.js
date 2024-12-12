@@ -18,7 +18,7 @@ function App() {
             component={StackQuizLevelGameScreen}
           />
           <Stack.Screen
-            name="StakArticleDetails"
+            name="StackArticleDetails"
             component={StackArticleDetails}
           />
         </Stack.Navigator>
