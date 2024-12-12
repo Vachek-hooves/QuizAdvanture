@@ -14,6 +14,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchImageLibrary} from 'react-native-image-picker';
+import ProfileAnimagtion from '../../components/ui/animation/ProfileAnimagtion';
 
 const TabProfile = () => {
   const [userData, setUserData] = useState({
@@ -129,7 +130,9 @@ const TabProfile = () => {
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
             <View style={styles.profileContainer}>
-              <TouchableOpacity onPress={selectImage} style={styles.imageContainer}>
+              <TouchableOpacity
+                onPress={selectImage}
+                style={styles.imageContainer}>
                 {userData.image ? (
                   <Image
                     source={{uri: userData.image}}
@@ -141,6 +144,7 @@ const TabProfile = () => {
                   </View>
                 )}
               </TouchableOpacity>
+              {/* <ProfileAnimagtion /> */}
 
               {isEditing ? (
                 <View style={styles.editContainer}>
@@ -206,12 +210,11 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-   
   },
   profileContainer: {
     padding: 20,
     alignItems: 'center',
-    marginTop:'40%',
+    marginTop: '40%',
   },
   imageContainer: {
     marginBottom: 20,
