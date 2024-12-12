@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {ProviderContext} from './store/context';
 import {StackQuizLevelGameScreen, WelcomeScreen} from './Screen/StackScreen';
 import TabNavigation from './Navigation/TabNavigation';
+import StackArticleDetails from './Screen/StackScreen/StackArticleDetails';
 
 const Stack = createNativeStackNavigator();
 function App() {
@@ -15,6 +16,10 @@ function App() {
           <Stack.Screen
             name="StackQuizLevelGameScreen"
             component={StackQuizLevelGameScreen}
+          />
+          <Stack.Screen
+            name="StakArticleDetails"
+            component={StackArticleDetails}
           />
         </Stack.Navigator>
       </NavigationContainer>
