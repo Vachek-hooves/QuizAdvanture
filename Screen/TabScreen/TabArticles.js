@@ -12,10 +12,11 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useAppContext} from '../../store/context';
+import {enciclopedia as EncyclopediaData} from '../../data/enciclopedia';
 
 const {width} = Dimensions.get('window');
 
-const ArticleCard = ({item, onUnlock, totalScore,onArticlePress}) => {
+const ArticleCard = ({item, onUnlock, totalScore, onArticlePress}) => {
   const handlePress = () => {
     if (item.isLocked) {
       Alert.alert(
@@ -41,36 +42,25 @@ const ArticleCard = ({item, onUnlock, totalScore,onArticlePress}) => {
   };
 
   return (
-    <TouchableOpacity 
-      onPress={handlePress} 
+    <TouchableOpacity
+      onPress={handlePress}
       activeOpacity={0.8}
-      style={item.isLocked ? styles.lockedCardWrapper : null}
-    >
+      style={item.isLocked ? styles.lockedCardWrapper : null}>
       <LinearGradient
         colors={
           item.isLocked
             ? ['rgba(47, 47, 47, 0.85)', 'rgba(32, 32, 32, 0.95)'] // Darker colors for locked cards
             : ['rgba(46, 139, 192, 0.4)', 'rgba(26, 95, 122, 0.6)']
         }
-        style={[
-          styles.card,
-          item.isLocked && styles.lockedCard
-        ]}>
-        <Image 
-          source={item.image} 
-          style={[
-            styles.cardImage,
-            item.isLocked && styles.lockedImage
-          ]} 
+        style={[styles.card, item.isLocked && styles.lockedCard]}>
+        <Image
+          source={item.image}
+          style={[styles.cardImage, item.isLocked && styles.lockedImage]}
         />
         <View style={styles.cardContent}>
-          <Text 
-            style={[
-              styles.cardTitle,
-              item.isLocked && styles.lockedTitle
-            ]} 
-            numberOfLines={2}
-          >
+          <Text
+            style={[styles.cardTitle, item.isLocked && styles.lockedTitle]}
+            numberOfLines={2}>
             {item.title}
           </Text>
           {item.isLocked && (
@@ -91,16 +81,14 @@ const TabArticles = ({navigation}) => {
     return statistics.reduce((total, stat) => total + (stat.score || 0), 0);
   };
 
-  const handleUnlock = async (enciclopediaId) => {
+  const handleUnlock = async enciclopediaId => {
     const totalScore = calculateTotalScore();
     if (totalScore >= 10) {
       const success = await unlockEnciclopedia(enciclopediaId);
       if (success) {
-        Alert.alert(
-          'Success!',
-          'Article unlocked successfully.',
-          [{text: 'OK'}],
-        );
+        Alert.alert('Success!', 'Article unlocked successfully.', [
+          {text: 'OK'},
+        ]);
       }
     } else {
       Alert.alert(
@@ -110,8 +98,8 @@ const TabArticles = ({navigation}) => {
       );
     }
   };
-  const handleArticlePress = (article) => {
-    navigation.navigate('StackArticleDetails', { article });
+  const handleArticlePress = article => {
+    navigation.navigate('StackArticleDetails', {article});
   };
 
   return (
@@ -125,7 +113,7 @@ const TabArticles = ({navigation}) => {
           <ScrollView style={styles.scrollView}>
             <Text style={styles.header}>Encyclopedia</Text>
             <View style={styles.cardsContainer}>
-              {enciclopedia.map((item) => (
+              {enciclopedia.map(item => (
                 <ArticleCard
                   key={item.id}
                   item={item}
