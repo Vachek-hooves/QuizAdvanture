@@ -433,7 +433,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.greece.lutrackiwarrior";
+				PRODUCT_BUNDLE_IDENTIFIER = com.greece.lutrackiwarrior;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuizAdvanture.app/QuizAdvanture";
 			};
@@ -457,7 +457,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.greece.lutrackiwarrior";
+				PRODUCT_BUNDLE_IDENTIFIER = com.greece.lutrackiwarrior;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuizAdvanture.app/QuizAdvanture";
 			};
@@ -483,7 +483,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.greece.lutrackiwarrior";
+				PRODUCT_BUNDLE_IDENTIFIER = com.greece.lutrackiwarrior;
 				PRODUCT_NAME = QuizAdvanture;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -510,7 +510,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.greece.lutrackiwarrior";
+				PRODUCT_BUNDLE_IDENTIFIER = com.greece.lutrackiwarrior;
 				PRODUCT_NAME = QuizAdvanture;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
