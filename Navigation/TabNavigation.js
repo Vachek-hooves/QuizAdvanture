@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, AppState} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   TabMapScreen,
@@ -6,17 +6,44 @@ import {
   TabStatiscticScreen,
 } from '../Screen/TabScreen';
 import TabArticles from '../Screen/TabScreen/TabArticles';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {
+  toggleBackgroundMusic,
+  setupPlayer,
+  pauseBackgroundMusic,
+  playBackgroundMusic,
+} from '../config/soundSetUp';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
   const [isPlayMusic, setIsPlayMusic] = useState(false);
-  console.log(isPlayMusic);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'active' && isPlayMusic) {
+        playBackgroundMusic();
+      } else if (nextAppState === 'inactive' || nextAppState === 'background') {
+        pauseBackgroundMusic();
+      }
+    });
+    const initMusic = async () => {
+      await setupPlayer();
+      await playBackgroundMusic();
+      setIsPlayMusic(true);
+    };
+    initMusic();
+
+    return () => {
+      subscription.remove();
+      pauseBackgroundMusic();
+    };
+  }, []);
+
   const handlePlayMusicToggle = () => {
-    // const newState = toggleBackgroundMusic();
-    // setIsPlayMusic(newState);
-    setIsPlayMusic(prev => !prev);
+    const newState = toggleBackgroundMusic();
+    setIsPlayMusic(newState);
+    // setIsPlayMusic(prev => !prev);
   };
   return (
     <Tab.Navigator
