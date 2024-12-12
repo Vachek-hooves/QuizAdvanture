@@ -5,6 +5,7 @@ import {
   Animated,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import MapView, {PROVIDER_DEFAULT, Polygon} from 'react-native-maps';
 import {poligonRegions} from '../../data/poligon';
@@ -14,12 +15,20 @@ import {
   SwardAnimation,
 } from '../../components/ui/animation';
 import LinearGradient from 'react-native-linear-gradient';
+import {quiz as QuizData} from '../../data/quiz';
+import {useAppContext} from '../../store/context';
+import ProfileAnimagtion from '../../components/ui/animation/ProfileAnimagtion';
 
 const TabMapScreen = ({navigation}) => {
-  const mapAnimation = useRef(new Animated.Value(0)).current;
-  const mapRef = useRef(null);
-  const [showAnimation, setShowAnimation] = useState(false);
+  const {statistics = [], unlockRegion, quiz} = useAppContext();
   const [selectedRegion, setSelectedRegion] = useState(null);
+  const [showAnimation, setShowAnimation] = useState(false);
+  const mapRef = useRef(null);
+
+  const isRegionLocked = regionId => {
+    const quizItem = quiz?.find(q => String(q.id) === String(regionId));
+    return quizItem ? quizItem.isLocked : true;
+  };
 
   const onRegionSelect = region => {
     setSelectedRegion(region);
@@ -33,19 +42,6 @@ const TabMapScreen = ({navigation}) => {
       },
       2000,
     );
-
-    Animated.sequence([
-      Animated.timing(mapAnimation, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(mapAnimation, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
   };
 
   const handlePlayBattle = () => {
@@ -58,6 +54,31 @@ const TabMapScreen = ({navigation}) => {
       });
     }, 2500);
   };
+
+  const calculateTotalScore = () => {
+    return statistics.reduce((total, stat) => total + (stat.score || 0), 0);
+  };
+
+  const handleUnlockRegion = async () => {
+    const totalScore = calculateTotalScore();
+    if (totalScore >= 35) {
+      const success = await unlockRegion(selectedRegion.id);
+      if (success) {
+        Alert.alert(
+          'Region Unlocked!',
+          "You've successfully unlocked this region and spent 35 points.",
+          [{text: 'OK'}],
+        );
+      }
+    } else {
+      Alert.alert(
+        'Not Enough Points',
+        `You need 35 points to unlock this region. Current total: ${totalScore}`,
+        [{text: 'OK'}],
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       <MapView
@@ -70,38 +91,52 @@ const TabMapScreen = ({navigation}) => {
           latitudeDelta: 3,
           longitudeDelta: 4,
         }}>
-        {poligonRegions.map((region, index) => (
-          <Polygon
-            key={index}
-            coordinates={region.coordinates}
-            fillColor={region.fillColor}
-            strokeColor={region.strokeColor}
-            strokeWidth={region.strokeWidth}
-            onPress={() => onRegionSelect(region)}
-            tappable={true}
-            zIndex={index + 1}
-          />
-        ))}
+        {poligonRegions.map((region, index) => {
+          const locked = isRegionLocked(region.id);
+
+          return (
+            <Polygon
+              key={index}
+              coordinates={region.coordinates}
+              fillColor={locked ? 'rgba(0, 0, 0, 0.6)' : region.fillColor}
+              strokeColor={locked ? '#666666' : region.strokeColor}
+              strokeWidth={region.strokeWidth}
+              onPress={() => onRegionSelect(region)}
+              tappable={true}
+              zIndex={index + 1}
+            />
+          );
+        })}
       </MapView>
 
       {selectedRegion && (
         <View style={styles.popupWrapper}>
           <MapMarkerAnimation />
-        <LinearGradient
-          colors={['rgba(12, 45, 72, 0.95)', 'rgba(20, 93, 160, 0.95)']}
-          style={styles.popupContainer}>
-          <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
-          {/* <Text style={styles.popupText}>Region ID: {selectedRegion.id}</Text> */}
-          <TouchableOpacity onPress={handlePlayBattle}>
-            <LinearGradient
-              colors={['#2E8BC0', '#1A5F7A']}
-              style={styles.playButton}
-              onPress={handlePlayBattle}>
-              <Text style={styles.playButtonText}>Play Battle</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </LinearGradient>
-                </View>
+          <LinearGradient
+            colors={['rgba(12, 45, 72, 0.95)', 'rgba(20, 93, 160, 0.95)']}
+            style={styles.popupContainer}>
+            <Text style={styles.popupTitle}>{selectedRegion.title}</Text>
+            {isRegionLocked(selectedRegion.id) ? (
+              <TouchableOpacity onPress={handleUnlockRegion}>
+                <LinearGradient
+                  colors={['#2E8BC0', '#1A5F7A']}
+                  style={styles.playButton}>
+                  <Text style={styles.playButtonText}>
+                    Unlock for 35 points
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={handlePlayBattle}>
+                <LinearGradient
+                  colors={['#2E8BC0', '#1A5F7A']}
+                  style={styles.playButton}>
+                  <Text style={styles.playButtonText}>Play Battle</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
+          </LinearGradient>
+        </View>
       )}
 
       {showAnimation && (
@@ -168,11 +203,17 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
   },
   playButton: {
+    // paddingVertical: 12,
     // paddingHorizontal: 30,
     borderRadius: 25,
     borderWidth: 1,
     borderColor: '#B4E0FF',
     marginVertical: 20,
+    marginTop: 10,
+  },
+  playButtonLocked: {
+    borderColor: '#666666',
+    opacity: 0.7,
   },
   playButtonText: {
     color: '#FFFFFF',
@@ -184,6 +225,9 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
     paddingVertical: 12,
     paddingHorizontal: 30,
+  },
+  playButtonTextLocked: {
+    color: '#999999',
   },
   animationContainer: {
     position: 'absolute',

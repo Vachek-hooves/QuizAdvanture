@@ -196,7 +196,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
                   </LinearGradient>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('TabNavigation')}>
+                  onPress={() => navigation.navigate('TabNavigation',{screen:'TabMapScreen'})}>
                   <LinearGradient
                     colors={['#145DA0', '#0C2D48']}
                     style={[styles.button, styles.mapButton]}>

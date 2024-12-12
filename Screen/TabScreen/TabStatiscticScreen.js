@@ -19,7 +19,13 @@ const TabStatiscticScreen = () => {
 
   const calculateTotalStats = () => {
     if (!statistics || statistics.length === 0) {
-      return {totalCorrect: 0, avgPercentage: 0, totalTime: 0, gamesPlayed: 0};
+      return {
+        totalCorrect: 0,
+        avgPercentage: 0,
+        totalTime: 0,
+        gamesPlayed: 0,
+        totalScore: 0,
+      };
     }
 
     const totals = statistics.reduce(
@@ -28,8 +34,9 @@ const TabStatiscticScreen = () => {
         totalPercentage: acc.totalPercentage + stat.percentage,
         totalTime: acc.totalTime + stat.timeSpent,
         gamesPlayed: acc.gamesPlayed + 1,
+        totalScore: acc.totalScore + (stat.score || 0),
       }),
-      {totalCorrect: 0, totalPercentage: 0, totalTime: 0, gamesPlayed: 0},
+      {totalCorrect: 0, totalPercentage: 0, totalTime: 0, gamesPlayed: 0, totalScore: 0},
     );
 
     return {
@@ -53,11 +60,12 @@ const TabStatiscticScreen = () => {
     const lastPlayed = new Date(
       Math.max(...regionStats.map(s => new Date(s.timestamp))),
     );
+    const highestScore = Math.max(...regionStats.map(s => s.score || 0));
 
-    return {bestScore, bestPercentage, bestTime, attempts, lastPlayed};
+    return {bestScore, bestPercentage, bestTime, attempts, lastPlayed, highestScore};
   };
 
-  const {totalCorrect, avgPercentage, totalTime, gamesPlayed} =
+  const {totalCorrect, avgPercentage, totalTime, gamesPlayed, totalScore} =
     calculateTotalStats();
 
   return (
@@ -96,6 +104,10 @@ const TabStatiscticScreen = () => {
                     </Text>
                     <Text style={styles.statLabel}>Avg Time</Text>
                   </View>
+                  <View style={styles.statItem}>
+                    <Text style={styles.statValue}>{totalScore}</Text>
+                    <Text style={styles.statLabel}>Total Score</Text>
+                  </View>
                 </View>
               </LinearGradient>
             </View>
@@ -130,6 +142,10 @@ const TabStatiscticScreen = () => {
                       <View style={styles.statItem}>
                         <Text style={styles.statValue}>{stats.bestTime}s</Text>
                         <Text style={styles.statLabel}>Best Time</Text>
+                      </View>
+                      <View style={styles.statItem}>
+                        <Text style={styles.statValue}>{stats.highestScore}</Text>
+                        <Text style={styles.statLabel}>Highest Score</Text>
                       </View>
                     </View>
                     <Text style={styles.lastPlayed}>
@@ -170,7 +186,7 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 15,
-    padding: 20,
+    // padding: 20,
     borderWidth: 1,
     borderColor: '#B4E0FF',
     shadowColor: '#000',
@@ -184,7 +200,7 @@ const styles = StyleSheet.create({
   },
   regionCard: {
     borderRadius: 15,
-    padding: 15,
+    // padding: 15,
     marginBottom: 15,
     borderWidth: 1,
     borderColor: '#B4E0FF',
@@ -203,6 +219,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    padding: 20,
   },
   statItem: {
     alignItems: 'center',
