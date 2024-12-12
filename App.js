@@ -11,7 +11,7 @@ function App() {
     <ProviderContext>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
-          {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="TabNavigation" component={TabNavigation} />
           <Stack.Screen
             name="StackQuizLevelGameScreen"
