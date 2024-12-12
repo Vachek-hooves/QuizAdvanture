@@ -60,7 +60,7 @@ const TabArticles = ({navigation}) => {
     navigation.navigate('StackArticleDetails', {article});
   };
 
-  console.log(mergedEnciclopedia)
+  // console.log(mergedEnciclopedia)
 
   return (
     <ImageBackground
