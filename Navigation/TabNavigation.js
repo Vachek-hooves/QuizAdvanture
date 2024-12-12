@@ -35,6 +35,11 @@ const TabNavigation = () => {
           // marginBottom: 3,
           paddingTop: 6,
         },
+        tabBarIconStyle: {
+          // fontSize: 36,
+          width: 50,
+          height: 50,
+        },
         tabBarActiveTintColor: '#B4E0FF',
         tabBarInactiveTintColor: '#6B8CA3',
       }}>
@@ -45,8 +50,12 @@ const TabNavigation = () => {
           tabBarLabel: 'Profile',
           tabBarIcon: ({focused, color}) => (
             <View
-              style={{backgroundColor: focused ? 'blue' : null, }}>
-              <Text style={{fontSize: 36 ,color}}>👤</Text>
+              style={{
+                backgroundColor: focused ? '#B4E0FF' : null,
+                padding: 5,
+                borderRadius: 10,
+              }}>
+              <Text style={{fontSize: 30, color}}>👤</Text>
             </View>
           ),
         }}
@@ -57,7 +66,14 @@ const TabNavigation = () => {
         options={{
           tabBarLabel: 'Map',
           tabBarIcon: ({focused, color}) => (
-            <Text style={{fontSize: 32, color}}>🗺️</Text>
+            <View
+              style={{
+                backgroundColor: focused ? '#B4E0FF' : null,
+                padding: 5,
+                borderRadius: 10,
+              }}>
+              <Text style={{fontSize: 32, color}}>🗺️</Text>
+            </View>
           ),
         }}
       />
@@ -67,7 +83,14 @@ const TabNavigation = () => {
         options={{
           tabBarLabel: 'Stats',
           tabBarIcon: ({focused, color}) => (
-            <Text style={{fontSize: 32, color}}>📊</Text>
+            <View
+              style={{
+                backgroundColor: focused ? '#B4E0FF' : null,
+                padding: 5,
+                borderRadius: 10,
+              }}>
+              <Text style={{fontSize: 32, color}}>📊</Text>
+            </View>
           ),
         }}
       />
@@ -77,7 +100,14 @@ const TabNavigation = () => {
         options={{
           tabBarLabel: 'Articles',
           tabBarIcon: ({focused, color}) => (
-            <Text style={{fontSize: 32, color}}>📚</Text>
+            <View
+              style={{
+                backgroundColor: focused ? '#B4E0FF' : null,
+                padding: 5,
+                borderRadius: 10,
+              }}>
+              <Text style={{fontSize: 32, color}}>📚</Text>
+            </View>
           ),
         }}
       />
@@ -87,15 +117,22 @@ const TabNavigation = () => {
         options={{
           tabBarLabel: 'Play',
           tabBarIcon: ({focused, color}) => (
-            <TouchableOpacity onPress={handlePlayMusicToggle}>
-              <Text style={{fontSize: 32, color}}>🎶</Text>
-            </TouchableOpacity>
+            <View
+              style={{
+                backgroundColor: isPlayMusic ? '#B4E0FF' : null,
+                padding: 5,
+                borderRadius: 10,
+              }}>
+              <TouchableOpacity onPress={handlePlayMusicToggle}>
+                <Text style={{fontSize: 32, color}}>🎶</Text>
+              </TouchableOpacity>
+            </View>
           ),
 
           tabBarLabelStyle: {
             fontSize: 14,
             fontWeight: '500',
-            color: isPlayMusic ? '#FF8C00' : '#666',
+            color: isPlayMusic ? '#B4E0FF' : '#666',
             marginTop: 5,
           },
         }}
@@ -106,7 +143,6 @@ const TabNavigation = () => {
 };
 
 export default TabNavigation;
-
 const EmptyComponent = () => null;
 
 const styles = StyleSheet.create({});
