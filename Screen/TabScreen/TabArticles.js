@@ -118,6 +118,8 @@ const styles = StyleSheet.create({
   },
   lockedCardWrapper: {
     opacity: 0.9,
+    borderWidth: 1,
+    borderColor: '#B4E0FF',
   },
   cardsContainer: {
     padding: 16,
@@ -141,6 +143,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   cardImage: {
     width: '100%',
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   lockedImage: {
-    opacity: 0.2,
+    opacity: 0.6,
     tintColor: '#404040', // Adds a dark tint to the image
   },
   cardContent: {
@@ -164,7 +167,7 @@ const styles = StyleSheet.create({
   },
   lockedTitle: {
     color: '#B4B4B4', // Lighter gray for locked titles
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
   },
   lockedBadge: {
     position: 'absolute',
