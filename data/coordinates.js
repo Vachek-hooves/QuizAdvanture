@@ -1,9 +1,9 @@
 export const creteCoordinates = [
-  {latitude: 35.00671, longitude: 25.81058},
-  {latitude: 35.27248, longitude: 23.64246},
-  {latitude: 35.47854, longitude: 23.60958},
-  {latitude: 35.24944, longitude: 25.72384},
-  {latitude: 35.11193, longitude: 25.90913},
+  {latitude: 34.8, longitude: 26.5},
+  {latitude: 34.7, longitude: 23.6},
+  {latitude: 35.7, longitude: 23.40},
+  // {latitude: 35.4, longitude: 25.7},
+  {latitude: 35.3, longitude: 26.5},
   
 ];
 
