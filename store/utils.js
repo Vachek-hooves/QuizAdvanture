@@ -1,8 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {quiz} from '../data/quiz';
+import { enciclopedia } from '../data/enciclopedia';
 
 const QUIZ_KEY = 'quiz';
 const STATS_KEY = 'quiz_statistics';
+const ENCICLOPEDIA_KEY = 'enciclopedia';
+
 
 export const saveQuizToStorage = async () => {
   try {
@@ -27,6 +30,27 @@ export const loadQuizFromStorage = async () => {
   }
 };
 
+export const saveEnciclopediaToStorage = async () => {
+  try {
+    await AsyncStorage.setItem(ENCICLOPEDIA_KEY, JSON.stringify(enciclopedia));
+  } catch (error) {
+    console.log('enciclopedia saving error', error);
+  }
+};
+
+export const loadEnciclopediaFromStorage = async () => {
+  try {
+    const savedEnciclopedia = await AsyncStorage.getItem(ENCICLOPEDIA_KEY);
+    if (!savedEnciclopedia) {
+      await saveEnciclopediaToStorage();
+      return enciclopedia;
+    }
+    return JSON.parse(savedEnciclopedia);
+  } catch (error) {
+    console.log('enciclopedia loading error', error);
+    return enciclopedia;
+  }
+};
 
 
 //  QUIZ GAMEPLAY UTILS

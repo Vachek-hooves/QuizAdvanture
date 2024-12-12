@@ -1,28 +1,31 @@
 import {createContext, useContext, useState, useEffect} from 'react';
 import {
   loadQuizFromStorage,
-  saveQuizToStorage,
   loadQuizStatistics,
   saveQuizStatistics,
   getQuizStats,
   unlockRegion as unlockRegionUtil,
   QUIZ_KEY,
+  loadEnciclopediaFromStorage
 } from './utils';
 const AppContext = createContext({statistics: []});
 
 export const ProviderContext = ({children}) => {
   const [quiz, setQuiz] = useState();
   const [statistics, setStatistics] = useState([]);
- 
+  const [enciclopedia, setEnciclopedia] = useState([]);
+
 
   useEffect(() => {
     const loadData = async () => {
-      const [quizData, statsData] = await Promise.all([
+      const [quizData, statsData, enciclopediaData] = await Promise.all([
         loadQuizFromStorage(),
         loadQuizStatistics(),
+        loadEnciclopediaFromStorage(),
       ]);
       setQuiz(quizData);
       setStatistics(statsData);
+      setEnciclopedia(enciclopediaData);
     };
     loadData();
   }, []);
