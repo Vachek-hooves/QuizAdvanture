@@ -7,6 +7,7 @@ import {
   unlockRegion as unlockRegionUtil,
   QUIZ_KEY,
   loadEnciclopediaFromStorage,
+  unlockEnciclopediaUtil,
 } from './utils';
 
 const AppContext = createContext({
@@ -16,7 +17,7 @@ const AppContext = createContext({
   saveQuizResult: () => {},
   getStatistics: () => {},
   unlockRegion: () => {},
- 
+  unlockEnciclopedia:()=>{}
 });
 
 export const ProviderContext = ({children}) => {
@@ -49,6 +50,22 @@ export const ProviderContext = ({children}) => {
     setStatistics(updatedStats);
   };
 
+  const unlockEnciclopedia = async enciclopediaId => {
+    const currentScore = statistics.reduce(
+      (total, stat) => total + (stat.score || 0),
+      0,
+    );
+    const result = await unlockEnciclopediaUtil(
+      enciclopedia,
+      enciclopediaId,
+      currentScore,
+    );
+    if (result) {
+      setEnciclopedia(result.updatedEnciclopedia);
+      setStatistics(result.updatedStats);
+    }
+  };
+
   const getStatistics = () => getQuizStats(statistics);
 
   const unlockRegion = async regionId => {
@@ -73,6 +90,7 @@ export const ProviderContext = ({children}) => {
     saveQuizResult,
     getStatistics,
     unlockRegion,
+    unlockEnciclopedia
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
