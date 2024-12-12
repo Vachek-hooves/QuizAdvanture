@@ -31,7 +31,14 @@ export const loadQuizFromStorage = async () => {
 
 export const saveEnciclopediaToStorage = async () => {
   try {
-    await AsyncStorage.setItem(ENCICLOPEDIA_KEY, JSON.stringify(enciclopedia));
+    // Save only necessary data (without images)
+    const storageData = enciclopedia.map(({id, isLocked, title, content}) => ({
+      id,
+      isLocked,
+      title,
+      content,
+    }));
+    await AsyncStorage.setItem(ENCICLOPEDIA_KEY, JSON.stringify(storageData));
   } catch (error) {
     console.log('enciclopedia saving error', error);
   }
@@ -65,8 +72,10 @@ export const unlockEnciclopediaUtil = async (
       JSON.stringify(updatedEnciclopedia),
     );
     const stats = await loadQuizStatistics();
-    const updatedStats = stats.map(stat =>
-      stat.score > currentScore ? {...stat, score: stat.score - 10} : stat,
+    const updatedStats = stats.map((stat, index) =>
+      index === stats.length - 1 // Update the last statistic entry
+        ? {...stat, score: currentScore - 10}
+        : stat,
     );
     await AsyncStorage.setItem(STATS_KEY, JSON.stringify(updatedStats));
     return {updatedEnciclopedia, updatedStats};

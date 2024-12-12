@@ -16,66 +16,14 @@ import {enciclopedia as EncyclopediaData} from '../../data/enciclopedia';
 
 const {width} = Dimensions.get('window');
 
-const ArticleCard = ({item, onUnlock, totalScore, onArticlePress}) => {
-  const handlePress = () => {
-    if (item.isLocked) {
-      Alert.alert(
-        'Unlock Article',
-        `Would you like to unlock this article for 10 points? (Current score: ${totalScore})`,
-        [
-          {
-            text: 'Cancel',
-            style: 'cancel',
-          },
-          {
-            text: 'Unlock',
-            onPress: () => onUnlock(item.id),
-          },
-        ],
-      );
-    } else {
-      onArticlePress(item);
-      // Handle navigation to full article view
-      // You can add navigation here later
-      // Alert.alert('Article Content', item.content);
-    }
-  };
-
-  return (
-    <TouchableOpacity
-      onPress={handlePress}
-      activeOpacity={0.8}
-      style={item.isLocked ? styles.lockedCardWrapper : null}>
-      <LinearGradient
-        colors={
-          item.isLocked
-            ? ['rgba(47, 47, 47, 0.85)', 'rgba(32, 32, 32, 0.95)'] // Darker colors for locked cards
-            : ['rgba(46, 139, 192, 0.4)', 'rgba(26, 95, 122, 0.6)']
-        }
-        style={[styles.card, item.isLocked && styles.lockedCard]}>
-        <Image
-          source={item.image}
-          style={[styles.cardImage, item.isLocked && styles.lockedImage]}
-        />
-        <View style={styles.cardContent}>
-          <Text
-            style={[styles.cardTitle, item.isLocked && styles.lockedTitle]}
-            numberOfLines={2}>
-            {item.title}
-          </Text>
-          {item.isLocked && (
-            <View style={styles.lockedBadge}>
-              <Text style={styles.lockedText}>Unlock for 10 points</Text>
-            </View>
-          )}
-        </View>
-      </LinearGradient>
-    </TouchableOpacity>
-  );
-};
-
 const TabArticles = ({navigation}) => {
-  const {enciclopedia, statistics, unlockEnciclopedia} = useAppContext();
+  const {enciclopedia: unlockedState, statistics, unlockEnciclopedia} = useAppContext();
+
+  // Merge locked states with original data to ensure image references are always present
+  const mergedEnciclopedia = EncyclopediaData.map(originalItem => ({
+    ...originalItem,
+    isLocked: unlockedState.find(e => e.id === originalItem.id)?.isLocked ?? true
+  }));
 
   const calculateTotalScore = () => {
     return statistics.reduce((total, stat) => total + (stat.score || 0), 0);
@@ -86,9 +34,13 @@ const TabArticles = ({navigation}) => {
     if (totalScore >= 10) {
       const success = await unlockEnciclopedia(enciclopediaId);
       if (success) {
-        Alert.alert('Success!', 'Article unlocked successfully.', [
-          {text: 'OK'},
-        ]);
+        // Force update the local state to maintain image references
+        const updatedEnciclopedia = mergedEnciclopedia.map(item => ({
+          ...item,
+          isLocked: item.id === enciclopediaId ? false : item.isLocked,
+        }));
+        // Re-render with updated state
+        setMergedEnciclopedia(updatedEnciclopedia);
       }
     } else {
       Alert.alert(
@@ -98,9 +50,12 @@ const TabArticles = ({navigation}) => {
       );
     }
   };
+
   const handleArticlePress = article => {
     navigation.navigate('StackArticleDetails', {article});
   };
+
+  console.log(mergedEnciclopedia)
 
   return (
     <ImageBackground
@@ -113,14 +68,28 @@ const TabArticles = ({navigation}) => {
           <ScrollView style={styles.scrollView}>
             <Text style={styles.header}>Encyclopedia</Text>
             <View style={styles.cardsContainer}>
-              {enciclopedia.map(item => (
-                <ArticleCard
-                  key={item.id}
-                  item={item}
-                  onUnlock={handleUnlock}
-                  totalScore={calculateTotalScore()}
-                  onArticlePress={handleArticlePress}
-                />
+              {mergedEnciclopedia.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => item.isLocked ? handleUnlock(item.id) : handleArticlePress(item)}
+                  style={[styles.card, item.isLocked && styles.lockedCard]}>
+                  <View style={item.isLocked ? styles.lockedCardWrapper : null}>
+                    <Image
+                      source={item.image}
+                      style={[styles.cardImage, item.isLocked && styles.lockedImage]}
+                    />
+                    <View style={styles.cardContent}>
+                      <Text style={[styles.cardTitle, item.isLocked && styles.lockedTitle]}>
+                        {item.title}
+                      </Text>
+                    </View>
+                    {item.isLocked && (
+                      <View style={styles.lockedBadge}>
+                        <Text style={styles.lockedText}>LOCKED</Text>
+                      </View>
+                    )}
+                  </View>
+                </TouchableOpacity>
               ))}
             </View>
           </ScrollView>
