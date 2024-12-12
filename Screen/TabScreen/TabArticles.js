@@ -34,6 +34,11 @@ const TabArticles = ({navigation}) => {
     if (totalScore >= 10) {
       const success = await unlockEnciclopedia(enciclopediaId);
       if (success) {
+        Alert.alert(
+          'Article Unlocked!',
+          'You can now read this article. Enjoy learning about ancient Greece!',
+          [{text: 'Great!', style: 'default'}],
+        );
         // Force update the local state to maintain image references
         const updatedEnciclopedia = mergedEnciclopedia.map(item => ({
           ...item,

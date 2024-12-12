@@ -63,6 +63,7 @@ export const ProviderContext = ({children}) => {
     if (result) {
       setEnciclopedia(result.updatedEnciclopedia);
       setStatistics(result.updatedStats);
+      return true
     }
   };
 
