@@ -4,7 +4,12 @@ import LottieView from 'lottie-react-native';
 const ProfileAnimagtion = () => {
   return (
     <LottieView
-      source={require('../../../assets/animations/profile.json')}
+      // source={require('../../../assets/animations/registration.json')}
+      // source={require('../../../assets/animations/registrationLock.json')}
+      source={require('../../../assets/animations/camera.json')}
+     
+    
+      
       
       autoPlay
       loop
@@ -17,7 +22,7 @@ export default ProfileAnimagtion;
 
 const styles = StyleSheet.create({
   container: {
-    width: 400,
-    height: 600,
+    width: 100,
+    height: 100,
   },
 });

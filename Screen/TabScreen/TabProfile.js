@@ -144,7 +144,7 @@ const TabProfile = () => {
                   </View>
                 )}
               </TouchableOpacity>
-              {/* <ProfileAnimagtion /> */}
+           
 
               {isEditing ? (
                 <View style={styles.editContainer}>

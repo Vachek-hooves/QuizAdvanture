@@ -17,6 +17,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import {quiz as QuizData} from '../../data/quiz';
 import {useAppContext} from '../../store/context';
+import ProfileAnimagtion from '../../components/ui/animation/ProfileAnimagtion';
 
 const TabMapScreen = ({navigation}) => {
   const {statistics = [], unlockRegion, quiz} = useAppContext();
@@ -24,8 +25,7 @@ const TabMapScreen = ({navigation}) => {
   const [showAnimation, setShowAnimation] = useState(false);
   const mapRef = useRef(null);
 
-
-  const isRegionLocked = (regionId) => {
+  const isRegionLocked = regionId => {
     const quizItem = quiz?.find(q => String(q.id) === String(regionId));
     return quizItem ? quizItem.isLocked : true;
   };
@@ -65,16 +65,16 @@ const TabMapScreen = ({navigation}) => {
       const success = await unlockRegion(selectedRegion.id);
       if (success) {
         Alert.alert(
-          "Region Unlocked!",
+          'Region Unlocked!',
           "You've successfully unlocked this region and spent 35 points.",
-          [{ text: "OK" }]
+          [{text: 'OK'}],
         );
       }
     } else {
       Alert.alert(
-        "Not Enough Points",
+        'Not Enough Points',
         `You need 35 points to unlock this region. Current total: ${totalScore}`,
-        [{ text: "OK" }]
+        [{text: 'OK'}],
       );
     }
   };
@@ -93,7 +93,7 @@ const TabMapScreen = ({navigation}) => {
         }}>
         {poligonRegions.map((region, index) => {
           const locked = isRegionLocked(region.id);
-          
+
           return (
             <Polygon
               key={index}
@@ -131,9 +131,7 @@ const TabMapScreen = ({navigation}) => {
                 <LinearGradient
                   colors={['#2E8BC0', '#1A5F7A']}
                   style={styles.playButton}>
-                  <Text style={styles.playButtonText}>
-                    Play Battle
-                  </Text>
+                  <Text style={styles.playButtonText}>Play Battle</Text>
                 </LinearGradient>
               </TouchableOpacity>
             )}
