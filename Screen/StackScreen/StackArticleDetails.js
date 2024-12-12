@@ -20,7 +20,7 @@ const StackArticleDetails = ({route, navigation}) => {
       style={styles.container}
       blurRadius={1}>
       <LinearGradient
-        colors={['rgba(12, 45, 72, 0.25)', 'rgba(20, 93, 160, 0.35)']}
+        colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.35)']}
         style={styles.container}>
         <SafeAreaView style={styles.container}>
           <View style={styles.header}>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: 'rgba(46, 139, 192, 0.6)',
+    backgroundColor: 'rgba(46, 139, 192, 0.4)',
     marginTop: -20,
     borderWidth: 1,
     borderColor: 'rgba(180, 224, 255, 0.3)',

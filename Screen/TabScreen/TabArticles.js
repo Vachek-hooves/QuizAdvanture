@@ -17,12 +17,17 @@ import {enciclopedia as EncyclopediaData} from '../../data/enciclopedia';
 const {width} = Dimensions.get('window');
 
 const TabArticles = ({navigation}) => {
-  const {enciclopedia: unlockedState, statistics, unlockEnciclopedia} = useAppContext();
+  const {
+    enciclopedia: unlockedState,
+    statistics,
+    unlockEnciclopedia,
+  } = useAppContext();
 
   // Merge locked states with original data to ensure image references are always present
   const mergedEnciclopedia = EncyclopediaData.map(originalItem => ({
     ...originalItem,
-    isLocked: unlockedState.find(e => e.id === originalItem.id)?.isLocked ?? true
+    isLocked:
+      unlockedState.find(e => e.id === originalItem.id)?.isLocked ?? true,
   }));
 
   const calculateTotalScore = () => {
@@ -32,7 +37,7 @@ const TabArticles = ({navigation}) => {
   const handleUnlock = async enciclopediaId => {
     const totalScore = calculateTotalScore();
     if (totalScore >= 10) {
-      const success = await unlockEnciclopedia(enciclopediaId);
+      const success = unlockEnciclopedia(enciclopediaId);
       if (success) {
         Alert.alert(
           'Article Unlocked!',
@@ -40,12 +45,12 @@ const TabArticles = ({navigation}) => {
           [{text: 'Great!', style: 'default'}],
         );
         // Force update the local state to maintain image references
-        const updatedEnciclopedia = mergedEnciclopedia.map(item => ({
-          ...item,
-          isLocked: item.id === enciclopediaId ? false : item.isLocked,
-        }));
+        // const updatedEnciclopedia = mergedEnciclopedia.map(item => ({
+        //   ...item,
+        //   isLocked: item.id === enciclopediaId ? false : item.isLocked,
+        // }));
         // Re-render with updated state
-        setMergedEnciclopedia(updatedEnciclopedia);
+        // setMergedEnciclopedia(updatedEnciclopedia);
       }
     } else {
       Alert.alert(
@@ -76,15 +81,26 @@ const TabArticles = ({navigation}) => {
               {mergedEnciclopedia.map((item, index) => (
                 <TouchableOpacity
                   key={index}
-                  onPress={() => item.isLocked ? handleUnlock(item.id) : handleArticlePress(item)}
+                  onPress={() =>
+                    item.isLocked
+                      ? handleUnlock(item.id)
+                      : handleArticlePress(item)
+                  }
                   style={[styles.card, item.isLocked && styles.lockedCard]}>
                   <View style={item.isLocked ? styles.lockedCardWrapper : null}>
                     <Image
                       source={item.image}
-                      style={[styles.cardImage, item.isLocked && styles.lockedImage]}
+                      style={[
+                        styles.cardImage,
+                        item.isLocked && styles.lockedImage,
+                      ]}
                     />
                     <View style={styles.cardContent}>
-                      <Text style={[styles.cardTitle, item.isLocked && styles.lockedTitle]}>
+                      <Text
+                        style={[
+                          styles.cardTitle,
+                          item.isLocked && styles.lockedTitle,
+                        ]}>
                         {item.title}
                       </Text>
                     </View>
