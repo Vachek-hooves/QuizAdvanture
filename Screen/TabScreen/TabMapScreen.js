@@ -23,7 +23,7 @@ const TabMapScreen = ({navigation}) => {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [showAnimation, setShowAnimation] = useState(false);
   const mapRef = useRef(null);
-  console.log(QuizData)
+
 
   const isRegionLocked = (regionId) => {
     const quizItem = quiz?.find(q => String(q.id) === String(regionId));
