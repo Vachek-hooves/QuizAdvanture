@@ -10,7 +10,12 @@ function App() {
   return (
     <ProviderContext>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            animation: 'fade_from_bottom',
+            animationDuration: 600,
+          }}>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="TabNavigation" component={TabNavigation} />
           <Stack.Screen

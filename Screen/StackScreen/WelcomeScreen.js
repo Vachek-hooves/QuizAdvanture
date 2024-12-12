@@ -18,7 +18,9 @@ const WelcomeScreen = ({navigation}) => {
         duration: 2000,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]).start(() => {
+      navigation.navigate('TabNavigation');
+    });
   }, [fadeAnim, scaleAnim]);
 
   return (
