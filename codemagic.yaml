@@ -3,11 +3,11 @@ workflows:
     name: Conquer Greece - Lutracki Warrior
     max_build_duration: 120
     integrations:
-      app_store_connect:
+      app_store_connect: ConquerGreeceCodemagicKey
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: ConquerGreeceCodemagicKey
+        bundle_identifier: com.greece.lutrackiwarrior
       vars:
         APP_STORE_APPLE_ID: 6739356812
         BUNDLE_ID: 'com.greece.lutrackiwarrior'
