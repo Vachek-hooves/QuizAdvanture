@@ -25,7 +25,7 @@ const WelcomeScreen = ({navigation}) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/welcomebg.png')}
+      source={require('../../assets/bg/bg.png')}
       style={styles.container}>
       <LinearGradient
         colors={['rgba(12, 45, 72, 0.25)', 'rgba(20, 93, 160, 0.45)']}

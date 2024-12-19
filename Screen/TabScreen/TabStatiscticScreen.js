@@ -70,7 +70,7 @@ const TabStatiscticScreen = () => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/math.png')}
+      source={require('../../assets/bg/bg.png')}
       style={styles.container}>
       <LinearGradient
         colors={['rgba(12, 45, 72, 0.55)', 'rgba(20, 93, 160, 0.8)']}
