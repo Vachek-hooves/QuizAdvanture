@@ -16,10 +16,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useAppContext} from '../../store/context';
 import {quiz as QuizData} from '../../data/quiz';
 import GoBack from '../../components/ui/staticIcons/GoBack';
-import {
-  MapMarkerAnimation,
- 
-} from '../../components/ui/animation';
+import {MapMarkerAnimation} from '../../components/ui/animation';
 
 const {width, height} = Dimensions.get('window');
 const StackQuizLevelGameScreen = ({route, navigation}) => {
@@ -196,7 +193,11 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
                   </LinearGradient>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('TabNavigation',{screen:'TabMapScreen'})}>
+                  onPress={() =>
+                    navigation.navigate('TabNavigation', {
+                      screen: 'TabMapScreen',
+                    })
+                  }>
                   <LinearGradient
                     colors={['#145DA0', '#0C2D48']}
                     style={[styles.button, styles.mapButton]}>
@@ -300,7 +301,7 @@ const StackQuizLevelGameScreen = ({route, navigation}) => {
               )}
             </View>
           </ScrollView>
-          <GoBack />
+          {/* <GoBack /> */}
         </SafeAreaView>
       </LinearGradient>
     </ImageBackground>

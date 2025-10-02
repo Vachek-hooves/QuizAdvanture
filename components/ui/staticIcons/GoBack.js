@@ -1,5 +1,6 @@
 import {Image, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+
 const GoBack = () => {
   const navigation = useNavigation();
   return (

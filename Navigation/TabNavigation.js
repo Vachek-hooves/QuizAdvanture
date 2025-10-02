@@ -17,34 +17,35 @@ import {
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
-  const [isPlayMusic, setIsPlayMusic] = useState(false);
+  // const [isPlayMusic, setIsPlayMusic] = useState(false);
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
-      if (nextAppState === 'active' && isPlayMusic) {
-        playBackgroundMusic();
-      } else if (nextAppState === 'inactive' || nextAppState === 'background') {
-        pauseBackgroundMusic();
-      }
-    });
-    const initMusic = async () => {
-      await setupPlayer();
-      await playBackgroundMusic();
-      setIsPlayMusic(true);
-    };
-    initMusic();
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener('change', nextAppState => {
+  //     if (nextAppState === 'active' && isPlayMusic) {
+  //       playBackgroundMusic();
+  //     } else if (nextAppState === 'inactive' || nextAppState === 'background') {
+  //       pauseBackgroundMusic();
+  //     }
+  //   });
+  //   const initMusic = async () => {
+  //     await setupPlayer();
+  //     await playBackgroundMusic();
+  //     setIsPlayMusic(true);
+  //   };
+  //   initMusic();
 
-    return () => {
-      subscription.remove();
-      pauseBackgroundMusic();
-    };
-  }, []);
+  //   return () => {
+  //     subscription.remove();
+  //     pauseBackgroundMusic();
+  //   };
+  // }, []);
 
-  const handlePlayMusicToggle = () => {
-    const newState = toggleBackgroundMusic();
-    setIsPlayMusic(newState);
-    // setIsPlayMusic(prev => !prev);
-  };
+  // const handlePlayMusicToggle = () => {
+  //   const newState = toggleBackgroundMusic();
+  //   setIsPlayMusic(newState);
+  //   // setIsPlayMusic(prev => !prev);
+  // };
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -141,7 +142,7 @@ const TabNavigation = () => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Play"
         component={EmptyComponent}
         options={{
@@ -167,7 +168,7 @@ const TabNavigation = () => {
           },
         }}
         listeners={{tabPress: e => e.preventDefault()}}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

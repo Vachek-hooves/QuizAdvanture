@@ -83,7 +83,8 @@ const TabMapScreen = ({navigation}) => {
     <View style={styles.container}>
       <MapView
         ref={mapRef}
-        provider={PROVIDER_DEFAULT}
+        // provider={PROVIDER_DEFAULT}
+        provider={Platform.OS === 'ios' ? 'google' : undefined}
         style={styles.map}
         region={{
           latitude: 37.3,

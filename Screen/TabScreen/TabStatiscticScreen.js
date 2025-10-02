@@ -36,7 +36,13 @@ const TabStatiscticScreen = () => {
         gamesPlayed: acc.gamesPlayed + 1,
         totalScore: acc.totalScore + (stat.score || 0),
       }),
-      {totalCorrect: 0, totalPercentage: 0, totalTime: 0, gamesPlayed: 0, totalScore: 0},
+      {
+        totalCorrect: 0,
+        totalPercentage: 0,
+        totalTime: 0,
+        gamesPlayed: 0,
+        totalScore: 0,
+      },
     );
 
     return {
@@ -62,7 +68,14 @@ const TabStatiscticScreen = () => {
     );
     const highestScore = Math.max(...regionStats.map(s => s.score || 0));
 
-    return {bestScore, bestPercentage, bestTime, attempts, lastPlayed, highestScore};
+    return {
+      bestScore,
+      bestPercentage,
+      bestTime,
+      attempts,
+      lastPlayed,
+      highestScore,
+    };
   };
 
   const {totalCorrect, avgPercentage, totalTime, gamesPlayed, totalScore} =
@@ -70,10 +83,10 @@ const TabStatiscticScreen = () => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/math.png')}
+      source={require('../../assets/bg/volcano.png')}
       style={styles.container}>
       <LinearGradient
-        colors={['rgba(12, 45, 72, 0.55)', 'rgba(20, 93, 160, 0.8)']}
+        colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.3)']}
         style={styles.container}>
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
@@ -144,7 +157,9 @@ const TabStatiscticScreen = () => {
                         <Text style={styles.statLabel}>Best Time</Text>
                       </View>
                       <View style={styles.statItem}>
-                        <Text style={styles.statValue}>{stats.highestScore}</Text>
+                        <Text style={styles.statValue}>
+                          {stats.highestScore}
+                        </Text>
                         <Text style={styles.statLabel}>Highest Score</Text>
                       </View>
                     </View>

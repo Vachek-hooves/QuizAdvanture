@@ -23,9 +23,9 @@ const StackArticleDetails = ({route, navigation}) => {
         colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.35)']}
         style={styles.container}>
         <SafeAreaView style={styles.container}>
-          <View style={styles.header}>
+          {/* <View style={styles.header}>
             <GoBack onPress={() => navigation.goBack()} />
-          </View>
+          </View> */}
           <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
             {/* <Image source={article.image} style={styles.heroImage} /> */}
             <View style={styles.contentContainer}>

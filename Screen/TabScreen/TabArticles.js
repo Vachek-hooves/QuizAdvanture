@@ -69,10 +69,10 @@ const TabArticles = ({navigation}) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/encyclopedis.png')}
+      source={require('../../assets/bg/volcano.png')}
       style={styles.container}>
       <LinearGradient
-        colors={['rgba(12, 45, 72, 0.45)', 'rgba(20, 93, 160, 0.6)']}
+        colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.3)']}
         style={styles.container}>
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>

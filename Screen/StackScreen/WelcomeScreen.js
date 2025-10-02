@@ -25,10 +25,10 @@ const WelcomeScreen = ({navigation}) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/welcomebg.png')}
+      source={require('../../assets/bg/welcomeVolcano.png')}
       style={styles.container}>
       <LinearGradient
-        colors={['rgba(12, 45, 72, 0.25)', 'rgba(20, 93, 160, 0.45)']}
+        colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.3)']}
         style={styles.gradientContainer}>
         <View style={styles.contentContainer}>
           <Animated.View
@@ -37,8 +37,8 @@ const WelcomeScreen = ({navigation}) => {
               transform: [{scale: scaleAnim}],
             }}>
             <View style={styles.titleContainer}>
-              <Text style={styles.mainTitle}>Conquer Greece</Text>
-              <Text style={styles.subtitle}>Loutraki Warrior</Text>
+              <Text style={styles.mainTitle}>Greece Volcano </Text>
+              <Text style={styles.subtitle}>Warior</Text>
             </View>
           </Animated.View>
         </View>

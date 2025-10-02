@@ -132,17 +132,22 @@ const TabProfile = () => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/warrior.png')}
+      source={require('../../assets/bg/volcano.png')}
       style={styles.container}>
       <LinearGradient
-        colors={['rgba(12, 45, 72, 0.45)', 'rgba(20, 93, 160, 0.6)']}
+        colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.3)']}
         style={styles.container}>
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
             <View style={styles.profileContainer}>
-              <TouchableOpacity onPress={selectImage} style={styles.imageContainer}>
+              <TouchableOpacity
+                onPress={selectImage}
+                style={styles.imageContainer}>
                 {tempImage ? (
-                  <Image source={{uri: tempImage}} style={styles.profileImage} />
+                  <Image
+                    source={{uri: tempImage}}
+                    style={styles.profileImage}
+                  />
                 ) : (
                   <View style={styles.placeholderImage}>
                     <Text style={styles.placeholderText}>Add Photo</Text>
