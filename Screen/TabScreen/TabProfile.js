@@ -132,10 +132,10 @@ const TabProfile = () => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/volcano.png')}
+      source={require('../../assets/bg/bg.png')}
       style={styles.container}>
       <LinearGradient
-        colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.3)']}
+        colors={['rgba(12, 45, 72, 0.15)', 'rgba(98, 153, 205, 0.3)']}
         style={styles.container}>
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     borderRadius: 75,
-    backgroundColor: 'rgba(180, 224, 255, 0.3)',
+    backgroundColor: 'rgba(80, 112, 136, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     borderColor: '#B4E0FF',
   },
   saveButton: {
-    backgroundColor: 'rgba(76, 175, 80, 0.6)',
+    backgroundColor: 'rgba(9, 180, 214, 0.6)',
     borderWidth: 1,
     borderColor: '#B4E0FF',
   },

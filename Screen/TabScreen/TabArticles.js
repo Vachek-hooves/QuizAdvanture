@@ -69,7 +69,7 @@ const TabArticles = ({navigation}) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/volcano.png')}
+      source={require('../../assets/bg/bg.png')}
       style={styles.container}>
       <LinearGradient
         colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.3)']}

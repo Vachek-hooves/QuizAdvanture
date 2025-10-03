@@ -51,7 +51,7 @@ const TabNavigation = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: 'rgba(12, 45, 72, 0.95)',
+          backgroundColor: 'rgba(161, 197, 227, 0.95)',
           borderTopWidth: 1,
           borderTopColor: '#B4E0FF',
           paddingBottom: 5,
@@ -68,8 +68,8 @@ const TabNavigation = () => {
           width: 50,
           height: 50,
         },
-        tabBarActiveTintColor: '#B4E0FF',
-        tabBarInactiveTintColor: '#6B8CA3',
+        tabBarActiveTintColor: '#058cedff',
+        tabBarInactiveTintColor: '#61676bff',
       }}>
       <Tab.Screen
         name="TabProfile"

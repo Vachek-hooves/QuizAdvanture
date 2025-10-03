@@ -83,7 +83,7 @@ const TabStatiscticScreen = () => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/volcano.png')}
+      source={require('../../assets/bg/bg.png')}
       style={styles.container}>
       <LinearGradient
         colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.3)']}
@@ -93,7 +93,7 @@ const TabStatiscticScreen = () => {
             {/* Overall Statistics */}
             <View style={styles.section}>
               <LinearGradient
-                colors={['#2E8BC0', '#1A5F7A']}
+                colors={['#65b3e1ff', '#203664ff']}
                 style={styles.card}>
                 <Text style={styles.sectionTitle}>Overall Statistics</Text>
                 <View style={styles.statsRow}>

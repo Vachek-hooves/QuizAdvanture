@@ -25,7 +25,7 @@ const WelcomeScreen = ({navigation}) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg/welcomeVolcano.png')}
+      source={require('../../assets/bg/bg1.png')}
       style={styles.container}>
       <LinearGradient
         colors={['rgba(12, 45, 72, 0.05)', 'rgba(20, 93, 160, 0.15)']}
@@ -37,8 +37,8 @@ const WelcomeScreen = ({navigation}) => {
               transform: [{scale: scaleAnim}],
             }}>
             <View style={styles.titleContainer}>
-              <Text style={styles.mainTitle}>Greece Volcano </Text>
-              <Text style={styles.subtitle}>Warior</Text>
+              <Text style={styles.mainTitle}>Way To</Text>
+              <Text style={styles.subtitle}>Olymp</Text>
             </View>
           </Animated.View>
         </View>
@@ -53,9 +53,10 @@ const styles = StyleSheet.create({
   },
   gradientContainer: {
     flex: 1,
-    // justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingTop: '20%',
+    // paddingTop: '20%',
+    paddingBottom: '10%',
   },
   contentContainer: {
     width: '90%',
