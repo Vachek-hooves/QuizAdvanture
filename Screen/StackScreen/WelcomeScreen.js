@@ -28,7 +28,7 @@ const WelcomeScreen = ({navigation}) => {
       source={require('../../assets/bg/welcomeVolcano.png')}
       style={styles.container}>
       <LinearGradient
-        colors={['rgba(12, 45, 72, 0.15)', 'rgba(20, 93, 160, 0.3)']}
+        colors={['rgba(12, 45, 72, 0.05)', 'rgba(20, 93, 160, 0.15)']}
         style={styles.gradientContainer}>
         <View style={styles.contentContainer}>
           <Animated.View
@@ -53,12 +53,13 @@ const styles = StyleSheet.create({
   },
   gradientContainer: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: '20%',
   },
   contentContainer: {
     width: '90%',
-    alignItems: 'center',
+    // alignItems: 'center',
     padding: 20,
     backgroundColor: 'rgba(12, 45, 72, 0.75)',
     borderRadius: 15,
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     borderColor: '#B4E0FF',
   },
   titleContainer: {
-    alignItems: 'center',
+    // alignItems: 'center',
     marginBottom: 20,
   },
   mainTitle: {
